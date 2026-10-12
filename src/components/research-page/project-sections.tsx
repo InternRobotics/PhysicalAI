@@ -9,23 +9,21 @@ import contents from "@/data/contents.json";
 import { aboutParagraphs, bibtex, citationText, coreElements, figures, partDescriptions, projectInfo, resources } from "@/data/project-page";
 import { assetPath } from "@/lib/asset-path";
 
-function pdfPage(page: number) { return `${assetPath(projectInfo.pdf)}#page=${page}`; }
-
 export function AboutSection() {
   return (
-    <SectionShell eyebrow="About the book" id="about" title="A unified view of Physical AI" lead="What is Physical AI? What does its technical landscape look like? What challenges stand between today's systems and general physical intelligence?">
+    <SectionShell eyebrow="About the book" id="about" title="A unified view of Physical AI" lead={<>What is Physical AI? What does its technical landscape look like?<br className="desktop-lead-break" />{" "}What challenges stand between today's systems and general physical intelligence?</>}>
       <div className="grid items-start gap-8 lg:grid-cols-[1fr_1fr]">
         <div className="space-y-5 text-base leading-8 text-muted-foreground">
           {aboutParagraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-          <div className="definition-note">
-            <p className="section-eyebrow">The organizing idea</p>
-            <p className="mt-3 text-foreground">Perception, prediction, decision-making, action, and adaptation form a continuous loop through the physical world.</p>
-            <a className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-primary" href={pdfPage(14)} target="_blank" rel="noopener noreferrer">Read the definition in Chapter 1 <ArrowUpRight aria-hidden="true" className="size-4" /></a>
-          </div>
         </div>
         <FigureCard caption="The system-level framework of Physical AI: models and control connected to the physical world through feedback. From Figure 1.3 of the monograph.">
           <ProjectImage {...figures.framework} />
         </FigureCard>
+      </div>
+      <div className="definition-note mt-8">
+        <p className="section-eyebrow">The organizing idea</p>
+        <p className="organizing-statement mt-3 text-foreground">Perception, prediction, decision-making, action, and adaptation form a continuous loop through the physical world.</p>
+        <a className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-primary" href={`${assetPath(projectInfo.pdf)}#page=14`} target="_blank" rel="noopener noreferrer">An organizing framework introduced in Chapter 1. <ArrowUpRight aria-hidden="true" className="size-4" /></a>
       </div>
       <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {coreElements.map((element) => <article className="step-card" key={element.number}><span>{element.number}</span><h3>{element.title}</h3><p>{element.body}</p></article>)}
@@ -34,43 +32,62 @@ export function AboutSection() {
   );
 }
 
-export function ContentsSection() {
+function ContentsPartCard({ part, chapters = part.chapters, continuation = false }: {
+  part: (typeof contents)[number];
+  chapters?: (typeof contents)[number]["chapters"];
+  continuation?: boolean;
+}) {
   return (
-    <SectionShell className="bg-muted/35" eyebrow="Inside the monograph" id="contents" title="Table of contents" lead="Three parts trace a path from concepts and foundations, through the technical stack, to future directions. Expand a chapter to explore its sections.">
-      <div className="grid gap-8">
-        {contents.map((part) => (
-          <article className="contents-part" key={part.id}>
-            <div className="contents-part-header">
-              <span className="part-number">{part.number}</span>
-              <div><p className="section-eyebrow">Part {part.number}</p><h3>{part.title}</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">{partDescriptions[part.id]}</p></div>
+    <article className={`contents-part${continuation ? " contents-part--continued" : ""}`}>
+      {!continuation ? (
+        <div className="contents-part-header">
+          <span className="part-number">{part.number}</span>
+          <div><h3>{part.title}</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">{partDescriptions[part.id]}</p></div>
+        </div>
+      ) : null}
+      <div className="contents-chapters">
+        {chapters.map((chapter) => (
+          <details className="chapter-details" key={chapter.number}>
+            <summary><span className="chapter-number">{String(chapter.number).padStart(2, "0")}</span><span className="chapter-title">{chapter.title}</span><span className="chapter-page">p. {chapter.page}</span><span aria-hidden="true" className="chapter-chevron" /></summary>
+            <div className="chapter-content">
+              <ol className="chapter-sections">
+                {chapter.sections.map((section) => <li className="chapter-section-row" key={section.number}><span className="text-primary">{section.number}</span><span>{section.title}</span><span className="chapter-page">{section.page}</span></li>)}
+              </ol>
             </div>
-            <div>
-              {part.chapters.map((chapter) => (
-                <details className="chapter-details" key={chapter.number}>
-                  <summary><span className="chapter-number">{String(chapter.number).padStart(2, "0")}</span><span className="chapter-title">{chapter.title}</span><span className="chapter-page">p. {chapter.page}</span><span aria-hidden="true" className="chapter-chevron" /></summary>
-                  <div className="chapter-content">
-                    <a className="chapter-read-link" href={pdfPage(chapter.page)} target="_blank" rel="noopener noreferrer">Read Chapter {chapter.number} <ArrowUpRight aria-hidden="true" className="size-4" /></a>
-                    <ol className="chapter-sections">
-                      {chapter.sections.map((section) => <li key={section.number}><a href={pdfPage(section.page)} target="_blank" rel="noopener noreferrer"><span className="text-primary">{section.number}</span><span>{section.title}</span><span className="chapter-page">{section.page}</span></a></li>)}
-                    </ol>
-                  </div>
-                </details>
-              ))}
-            </div>
-          </article>
+          </details>
         ))}
       </div>
-      <a className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-primary" href={pdfPage(313)} target="_blank" rel="noopener noreferrer">References · p. 313 <ArrowUpRight aria-hidden="true" className="size-4" /></a>
-      <p className="results-note">Page numbers refer to the current preprint. Section links open the PDF at the corresponding page.</p>
+    </article>
+  );
+}
+
+export function ContentsSection() {
+  const [overview, methodology, outlook] = contents;
+  const methodologySplit = Math.ceil(methodology.chapters.length / 2);
+
+  return (
+    <SectionShell className="bg-muted/35" eyebrow="Inside the monograph" id="contents" title="Table of contents" headingClassName="max-w-none" lead={<>Three parts trace a path from concepts and foundations, through the technical stack, to future directions.<br className="desktop-lead-break" />{" "}Expand a chapter to explore its sections.</>}>
+      <div className="contents-grid">
+        <div className="contents-column">
+          <ContentsPartCard part={overview} />
+          <ContentsPartCard part={methodology} chapters={methodology.chapters.slice(0, methodologySplit)} />
+        </div>
+        <div className="contents-column">
+          <ContentsPartCard part={methodology} chapters={methodology.chapters.slice(methodologySplit)} continuation />
+          <ContentsPartCard part={outlook} />
+        </div>
+      </div>
+      <p className="mt-5 text-sm font-medium">References <span className="ml-2 text-muted-foreground">p. 313</span></p>
+      <p className="results-note">Expand a chapter to view its sections. Page numbers refer to the current preprint.</p>
     </SectionShell>
   );
 }
 
 export function AuthorsSection() {
   return (
-    <SectionShell eyebrow="Authors" id="authors" title="Physical Intelligence Team" lead="Shanghai AI Laboratory">
-      <div className="step-card max-w-4xl">
-        <p className="!mt-0">The monograph is authored by the Physical Intelligence Team, Shanghai AI Laboratory. It brings together the concepts, techniques, and challenges of intelligence that interacts with the physical world.</p>
+    <SectionShell eyebrow="Authors" id="authors" title="About the authors" lead="Physical Intelligence Team, Shanghai AI Laboratory">
+      <div className="max-w-4xl space-y-4 leading-8 text-muted-foreground">
+        <p>The monograph is authored by the Physical Intelligence Team, Shanghai AI Laboratory. It brings together the concepts, techniques, and challenges of intelligence that interacts with the physical world.</p>
         <p className="text-sm">Individual author profiles and acknowledgments will be added when available.</p>
       </div>
     </SectionShell>
@@ -81,7 +98,7 @@ const resourceIcons = { pdf: BookOpen, code: Code2, slides: Presentation, errata
 
 export function ResourcesSection() {
   return (
-    <SectionShell className="bg-muted/35" eyebrow="Read & explore" id="resources" title="The book and companion resources" lead="Start with the preprint. This page will also provide a home for companion materials as they become available.">
+    <SectionShell className="bg-muted/35" eyebrow="Read & explore" id="resources" title="The book and companion resources" headingClassName="max-w-none" leadClassName="desktop-single-line-lead" lead="Start with the preprint. This page will also provide a home for companion materials as they become available.">
       <div className="grid gap-5 md:grid-cols-2">
         {resources.map((resource) => {
           const Icon = resourceIcons[resource.icon];
@@ -111,7 +128,7 @@ export function ResourcesSection() {
 export function BibtexSection() {
   return (
     <SectionShell eyebrow="Citation" id="bibtex" title="Cite the monograph" lead="For the current manuscript, please use the preprint citation below.">
-      <p className="mb-7 max-w-4xl text-base leading-8 text-muted-foreground">{citationText}</p>
+      <p className="citation-prose mb-7 text-base leading-8 text-muted-foreground">{citationText}</p>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-4"><h3 className="flex items-center gap-2 font-semibold"><FileText aria-hidden="true" className="size-4 text-primary" />BibTeX</h3><CopyCitation text={bibtex} /></div>
       <pre className="overflow-x-auto rounded-lg border border-border bg-card p-5 text-sm leading-7 text-foreground"><code>{bibtex}</code></pre>
       <p className="results-note">The citation will be updated when final publication details are available.</p>

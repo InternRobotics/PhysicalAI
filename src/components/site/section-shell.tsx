@@ -4,7 +4,9 @@ type SectionShellProps = {
   id: string;
   eyebrow?: string;
   title: string;
-  lead?: string;
+  lead?: React.ReactNode;
+  leadClassName?: string;
+  headingClassName?: string;
   children: React.ReactNode;
   className?: string;
   narrow?: boolean;
@@ -15,6 +17,8 @@ export function SectionShell({
   eyebrow,
   title,
   lead,
+  leadClassName,
+  headingClassName,
   children,
   className,
   narrow = false,
@@ -25,7 +29,7 @@ export function SectionShell({
       id={id}
     >
       <div className={cn("mx-auto", narrow ? "max-w-[820px]" : "max-w-[1120px]")}>
-        <div className="mb-10 max-w-4xl">
+        <div className={cn("mb-10 max-w-4xl", headingClassName)}>
           {eyebrow ? (
             <p className="section-eyebrow mb-3">
               {eyebrow}
@@ -35,7 +39,7 @@ export function SectionShell({
             {title}
           </h2>
           {lead ? (
-            <p className="mt-5 text-lg leading-8 text-muted-foreground">
+            <p className={cn("mt-5 text-lg leading-8 text-muted-foreground", leadClassName)}>
               {lead}
             </p>
           ) : null}

@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <>
       <SiteHeader />
-      <main id="main-content">
+      <main className="book-page" id="main-content">
         <HeroSection />
         <AboutSection />
         <ContentsSection />

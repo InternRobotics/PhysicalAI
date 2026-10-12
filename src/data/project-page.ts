@@ -6,7 +6,7 @@ export const projectInfo = {
   fullTitle: "Physical AI: Concepts, Techniques, and Challenges",
   subtitle: ["Concepts, Techniques, and Challenges"],
   status: "Forthcoming monograph · Preprint",
-  description: "A unified view of intelligence that perceives, models, and acts upon the physical world — from technical foundations and embodied systems to the challenges of Physical AGI.",
+  description: "A monograph on intelligence that perceives, models, and acts upon the physical world, connecting technical foundations with embodied systems and the challenges of Physical AGI.",
   team: "Physical Intelligence Team, Shanghai AI Laboratory",
   year: "2026",
   pdf: "/paper/Physical_AI___Monograph.pdf",
@@ -34,12 +34,12 @@ export const heroActions = [
   { label: "Resources", href: "#resources", icon: "resources" },
   { label: "BibTeX", href: "#bibtex", icon: "citation" },
 ];
-export const stats = [
-  { id: "parts", value: "3", label: "Parts", detail: "Foundations, methodology, and future outlook." },
-  { id: "chapters", value: "12", label: "Chapters", detail: "From physical perception to system governance." },
-  { id: "pages", value: "362", label: "Pages in the preprint", detail: "Including the contents and references." },
-  { id: "scope", value: "2026", label: "Preprint manuscript", detail: "Publication details to be announced." },
-];
+export const bookCover: ImageAsset = {
+  src: "/images/monograph/cover-v2.png",
+  width: 1024,
+  height: 1536,
+  alt: "Book cover of Physical AI: Concepts, Techniques, and Challenges",
+};
 export const figures: Record<string, ImageAsset> = {
   teaser: { src: "/images/monograph/progression.png", width: 1212, height: 372, alt: "Figure 1.1: progression from digital tools and simulated agents to real-world agents, multi-agent collaboration, and infrastructure-level physical intelligence" },
   framework: { src: "/images/monograph/closed-loop.png", width: 1200, height: 828, alt: "Figure 1.3: perception, world modeling, decision-making, and control connected through physical feedback, data, and hardware" },
