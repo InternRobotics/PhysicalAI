@@ -46,38 +46,34 @@ pnpm install --frozen-lockfile
 部署到子路径时，构建前设置实际路径，例如：
 
 ```powershell
-$env:NEXT_PUBLIC_BASE_PATH = '/physical-ai'
-pnpm build
+$env:NEXT_PUBLIC_BASE_PATH = '/PhysicalAI'
+.\scripts\build.ps1
 ```
 
 返回根路径构建前，使用 `Remove-Item Env:NEXT_PUBLIC_BASE_PATH -ErrorAction SilentlyContinue`。
-本次只创建本地代码与预览，未发布到网络。
+本地代码已准备好，是否已发布以 GitHub Actions 的部署结果为准。
 
 ## 发布到 InternRobotics 的 GitHub Pages
 
-建议创建项目仓库 `InternRobotics/physical-ai`，对应网址：
-https://internrobotics.github.io/physical-ai/ 。仓库名使用小写和连字符，不使用空格。
-网页中显示的书名仍为 Physical AI。
+目标仓库为 `InternRobotics/PhysicalAI`，对应网址：
+https://internrobotics.github.io/PhysicalAI/ 。请使用这一大小写。
+截至本次检查，目标仓库已存在且为 Public，但尚未启用 Pages。
 项目站点不需要改动现有 `InternRobotics/internrobotics.github.io` 仓库。
 
 本项目已提供 `.github/workflows/deploy-pages.yml`。推送到 `main` 后，GitHub Actions
 自动安装依赖、构建和部署 `out/`。构建时读取 GitHub Pages 的 `base_path`，使图片、
-样式、脚本和 PDF 使用正确的子路径；本地无需手动固定 `/physical-ai`。
+样式、脚本和 PDF 使用正确的子路径；本地运行无需固定 `/PhysicalAI`。
 
-首次发布步骤：
+当前项目的发布步骤：
 
-1. 打开 https://github.com/new ，Owner 选择 `InternRobotics`，Repository name 填
-   `physical-ai`，选择 Public，保持新仓库为空，不添加 README、.gitignore 或 License。
-   如果无法选择该组织，请组织管理员创建仓库并授予你写入权限及 Pages 管理权限。
-2. 在 PowerShell 中进入本项目目录，执行以下命令。它们适用于当前尚未初始化 Git
-   的本地项目和新建的空远程仓库，不用于已有提交的远程仓库：
+1. 打开 https://github.com/InternRobotics/PhysicalAI/settings/pages ，
+   在 **Build and deployment → Source** 中选择 **GitHub Actions**。
+   已有工作流，不必选择或生成其他模板。配置 Pages 需要仓库的管理员或维护者权限。
+2. 本地已经初始化 Git，远程地址已修正为 `InternRobotics/PhysicalAI`；
+   目标仓库的初始化提交已合并，双方历史均保留。直接推送本地 `main`：
 
 ```powershell
 cd "D:\桌面\网站\Physical-AI-Monograph-site"
-git init -b main
-git add .
-git commit -m "Add Physical AI monograph website"
-git remote add origin https://github.com/InternRobotics/physical-ai.git
 git push -u origin main
 ```
 
@@ -85,11 +81,15 @@ git push -u origin main
 上传的是本文件夹的内容，使 `package.json`、`src/`、`public/`、`.github/` 位于远程
 仓库根目录，不要在远程额外套一层 `Physical-AI-Monograph-site/`。
 
-3. 打开仓库 Settings → Pages → Build and deployment，将 Source 设为 **GitHub Actions**。
-4. 打开仓库 Actions → **Deploy Physical AI to GitHub Pages** → **Run workflow**，
-   选择 `main` 执行。首次推送如果发生在启用 Pages 之前，手动执行即可重新部署。
-5. 等待 build、deploy 均成功，访问 https://internrobotics.github.io/physical-ai/ 。
+3. 打开 https://github.com/InternRobotics/PhysicalAI/actions ，推送会自动触发
+   **Deploy Physical AI to GitHub Pages**。如果推送时尚未启用 Pages，
+   启用后在该工作流中选择 **Run workflow → main** 重新执行。
+4. 等待 build、deploy 均成功，访问 https://internrobotics.github.io/PhysicalAI/ 。
    网站地址也会显示在仓库 Settings → Pages 中。
+
+如果 GitHub 在推送时要求登录，使用有权写入该仓库的账号完成登录。
+如果仓库保护 `main`、要求 Pull Request，则遵守仓库规则通过 PR 提交，不要强制推送。
+本地项目名 `Physical-AI-Monograph-site` 不影响最终 URL；URL 的子路径来自远程仓库名。
 
 之后更新网页，只需要修改源码并推送：
 
