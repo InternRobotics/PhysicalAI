@@ -32,7 +32,7 @@ export function HeroSection() {
           </div>
           <p className="book-hero-description">{projectInfo.description}</p>
           <div className="book-hero-actions">
-            {heroActions.map((action, index) => (
+            {heroActions.map((action, index) => action.href ? (
               <a
                 className={buttonClasses({ size: "md", variant: index === 0 ? "default" : "outline" })}
                 href={assetPath(action.href)}
@@ -42,13 +42,17 @@ export function HeroSection() {
               >
                 {icons[action.icon]}{action.label}
               </a>
+            ) : (
+              <button className={buttonClasses({ size: "md", variant: index === 0 ? "default" : "outline" })} disabled key={action.label} type="button">
+                {icons[action.icon]}{action.label}
+              </button>
             ))}
           </div>
-          <p className="book-edition-note">Preprint available · Publication details to be announced</p>
+          <p className="book-edition-note">{projectInfo.pdf ? "Preprint available" : "Preprint coming soon"} · Publication details to be announced</p>
           <dl aria-label="About this edition" className="book-facts">
             <div><dt>Parts</dt><dd>3</dd></div>
             <div><dt>Chapters</dt><dd>12</dd></div>
-            <div><dt>Preprint pages</dt><dd>362</dd></div>
+            <div><dt>Manuscript pages</dt><dd>362</dd></div>
           </dl>
         </div>
         <figure className="book-cover-figure">

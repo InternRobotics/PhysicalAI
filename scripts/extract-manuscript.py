@@ -6,7 +6,7 @@ import pypdfium2 as pdfium
 from pypdf import PdfReader
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "public/paper/Physical_AI___Monograph.pdf"
+SOURCE = ROOT / "reference/private-manuscript/Physical_AI___Monograph.pdf"
 reader = PdfReader(SOURCE)
 outline = reader.outline
 parts = []

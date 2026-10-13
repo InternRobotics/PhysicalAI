@@ -5,12 +5,11 @@ export const projectInfo = {
   name: "Physical AI",
   fullTitle: "Physical AI: Concepts, Techniques, and Challenges",
   subtitle: ["Concepts, Techniques, and Challenges"],
-  status: "Forthcoming monograph · Preprint",
+  status: "Forthcoming monograph · Preprint coming soon",
   description: "A monograph on intelligence that perceives, models, and acts upon the physical world, connecting technical foundations with embodied systems and the challenges of Physical AGI.",
   team: "Physical Intelligence Team, Shanghai AI Laboratory",
   year: "2026",
-  pdf: "/paper/Physical_AI___Monograph.pdf",
-  pdfSize: "66.1 MB",
+  pdf: null as string | null,
   publisher: null as string | null,
   publicationDate: null as string | null,
   purchaseUrl: null as string | null,
@@ -29,7 +28,7 @@ export const teamLogos: (ImageAsset & { id: string })[] = [
   { id: "shanghai-ai-laboratory", src: "/images/ailab-logo.png", width: 672, height: 390, alt: "Shanghai Artificial Intelligence Laboratory" },
 ];
 export const heroActions = [
-  { label: "Read the preprint", href: projectInfo.pdf, icon: "pdf" },
+  { label: projectInfo.pdf ? "Read the preprint" : "Preprint coming soon", href: projectInfo.pdf, icon: "pdf" },
   { label: "Table of contents", href: "#contents", icon: "contents" },
   { label: "Resources", href: "#resources", icon: "resources" },
   { label: "BibTeX", href: "#bibtex", icon: "citation" },
@@ -62,15 +61,15 @@ export const partDescriptions: Record<string, string> = {
   iii: "General physical intelligence, evaluation and governance, and long-term development strategies.",
 };
 export const resources: { id: string; title: string; description: string; label: string; href: string | null; icon: "pdf" | "code" | "slides" | "errata" }[] = [
-  { id: "preprint", title: "Preprint manuscript", description: "Read the current 362-page manuscript, including all 12 chapters and the reference list.", label: "Open PDF · 66.1 MB", href: projectInfo.pdf, icon: "pdf" },
+  { id: "preprint", title: "Preprint manuscript", description: "The preprint will be shared here when it is ready for public release.", label: projectInfo.pdf ? "Open preprint" : "Coming soon", href: projectInfo.pdf, icon: "pdf" },
   { id: "code", title: "Code & examples", description: "A space for companion implementations and examples. Links will be added when available.", label: "Coming soon", href: null, icon: "code" },
   { id: "slides", title: "Lecture slides", description: "A space for chapter slides and teaching materials to accompany the monograph.", label: "Coming soon", href: null, icon: "slides" },
   { id: "errata", title: "Errata & feedback", description: "Corrections and a reader feedback channel will be added here when available.", label: "Coming soon", href: null, icon: "errata" },
 ];
-export const citationText = `${projectInfo.team}. ${projectInfo.fullTitle}. Preprint, 2026.`;
+export const citationText = `${projectInfo.team}. ${projectInfo.fullTitle}. Forthcoming, 2026.`;
 export const bibtex = `@misc{physicalai2026monograph,
   title  = {Physical AI: Concepts, Techniques, and Challenges},
   author = {{Physical Intelligence Team, Shanghai AI Laboratory}},
   year   = {2026},
-  note   = {Preprint}
+  note   = {Forthcoming; manuscript not yet publicly released}
 }`;

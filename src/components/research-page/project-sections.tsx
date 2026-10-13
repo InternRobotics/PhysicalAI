@@ -1,4 +1,4 @@
-import { ArrowDownToLine, ArrowUpRight, BookOpen, Code2, FileText, MessageSquare, Presentation } from "lucide-react";
+import { ArrowUpRight, BookOpen, Code2, FileText, MessageSquare, Presentation } from "lucide-react";
 
 import { ProjectImage } from "@/components/media/project-image";
 import { CopyCitation } from "@/components/research-page/copy-citation";
@@ -23,7 +23,7 @@ export function AboutSection() {
       <div className="definition-note mt-8">
         <p className="section-eyebrow">The organizing idea</p>
         <p className="organizing-statement mt-3 text-foreground">Perception, prediction, decision-making, action, and adaptation form a continuous loop through the physical world.</p>
-        <a className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-primary" href={`${assetPath(projectInfo.pdf)}#page=14`} target="_blank" rel="noopener noreferrer">An organizing framework introduced in Chapter 1. <ArrowUpRight aria-hidden="true" className="size-4" /></a>
+        {projectInfo.pdf ? <a className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-primary" href={`${assetPath(projectInfo.pdf)}#page=14`} target="_blank" rel="noopener noreferrer">An organizing framework introduced in Chapter 1. <ArrowUpRight aria-hidden="true" className="size-4" /></a> : <p className="mt-3 text-sm font-medium text-muted-foreground">An organizing framework introduced in Chapter 1.</p>}
       </div>
       <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {coreElements.map((element) => <article className="step-card" key={element.number}><span>{element.number}</span><h3>{element.title}</h3><p>{element.body}</p></article>)}
@@ -78,7 +78,7 @@ export function ContentsSection() {
         </div>
       </div>
       <p className="mt-5 text-sm font-medium">References <span className="ml-2 text-muted-foreground">p. 313</span></p>
-      <p className="results-note">Expand a chapter to view its sections. Page numbers refer to the current preprint.</p>
+      <p className="results-note">Expand a chapter to view its sections. Page numbers refer to the draft manuscript.</p>
     </SectionShell>
   );
 }
@@ -98,7 +98,7 @@ const resourceIcons = { pdf: BookOpen, code: Code2, slides: Presentation, errata
 
 export function ResourcesSection() {
   return (
-    <SectionShell className="bg-muted/35" eyebrow="Read & explore" id="resources" title="The book and companion resources" headingClassName="max-w-none" leadClassName="desktop-single-line-lead" lead="Start with the preprint. This page will also provide a home for companion materials as they become available.">
+    <SectionShell className="bg-muted/35" eyebrow="Read & explore" id="resources" title="The book and companion resources" headingClassName="max-w-none" leadClassName="desktop-single-line-lead" lead="The preprint is coming soon. Companion materials will be shared here as they become available.">
       <div className="grid gap-5 md:grid-cols-2">
         {resources.map((resource) => {
           const Icon = resourceIcons[resource.icon];
@@ -114,7 +114,7 @@ export function ResourcesSection() {
         })}
       </div>
       <div className="publication-details mt-8">
-        <div><p className="section-eyebrow">Publication</p><h3 className="mt-3 text-xl font-semibold">Forthcoming</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">The manuscript is available as a preprint. Final publication information will appear here.</p></div>
+        <div><p className="section-eyebrow">Publication</p><h3 className="mt-3 text-xl font-semibold">Forthcoming</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">The manuscript is being prepared for public release. Publication information will appear here.</p></div>
         <dl className="publication-facts">
           <div><dt>Publisher</dt><dd>{projectInfo.publisher ?? "To be announced"}</dd></div>
           <div><dt>Publication date</dt><dd>{projectInfo.publicationDate ?? "To be announced"}</dd></div>
@@ -127,15 +127,15 @@ export function ResourcesSection() {
 
 export function BibtexSection() {
   return (
-    <SectionShell eyebrow="Citation" id="bibtex" title="Cite the monograph" lead="For the current manuscript, please use the preprint citation below.">
+    <SectionShell eyebrow="Citation" id="bibtex" title="Cite the monograph" lead="This is a provisional citation for the forthcoming monograph.">
       <p className="citation-prose mb-7 text-base leading-8 text-muted-foreground">{citationText}</p>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-4"><h3 className="flex items-center gap-2 font-semibold"><FileText aria-hidden="true" className="size-4 text-primary" />BibTeX</h3><CopyCitation text={bibtex} /></div>
       <pre className="overflow-x-auto rounded-lg border border-border bg-card p-5 text-sm leading-7 text-foreground"><code>{bibtex}</code></pre>
-      <p className="results-note">The citation will be updated when final publication details are available.</p>
+      <p className="results-note">The citation will be updated when the manuscript and final publication details are available.</p>
       <div className="mt-12 border-t border-border pt-10">
         <h3 className="text-2xl font-semibold">Explore intelligence in the physical world.</h3>
-        <p className="mt-3 text-muted-foreground">Read the preprint or begin with a chapter in the table of contents.</p>
-        <div className="mt-6 flex flex-wrap gap-3"><a className={buttonClasses()} href={assetPath(projectInfo.pdf)} target="_blank" rel="noopener noreferrer"><ArrowDownToLine aria-hidden="true" />Read the preprint</a><a className={buttonClasses({ variant: "outline" })} href="#contents">Browse the contents</a></div>
+        <p className="mt-3 text-muted-foreground">Explore the table of contents while the preprint is being prepared for release.</p>
+        <div className="mt-6 flex flex-wrap gap-3">{projectInfo.pdf ? <a className={buttonClasses()} href={assetPath(projectInfo.pdf)} target="_blank" rel="noopener noreferrer"><BookOpen aria-hidden="true" />Read the preprint</a> : <button className={buttonClasses()} disabled type="button"><BookOpen aria-hidden="true" />Preprint coming soon</button>}<a className={buttonClasses({ variant: "outline" })} href="#contents">Browse the contents</a></div>
       </div>
     </SectionShell>
   );

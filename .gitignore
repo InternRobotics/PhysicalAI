@@ -13,6 +13,9 @@ dist/
 # local reference material
 reference/
 
+# unpublished manuscript
+public/paper/Physical_AI___Monograph.pdf
+
 # coverage
 coverage/
 
