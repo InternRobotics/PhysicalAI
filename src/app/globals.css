@@ -1082,6 +1082,7 @@ a:focus-visible {
   transition: background 0.15s;
 }
 .chapter-details summary::-webkit-details-marker { display: none; }
+.contents-part[data-part="ii"] .chapter-details summary { min-height: 4.2rem; padding-block: 0.8rem; }
 .chapter-details summary:hover { background: color-mix(in oklab, var(--muted) 55%, transparent); }
 .chapter-details summary:focus-visible { outline: 2px solid var(--ring); outline-offset: -4px; }
 .chapter-details[open] summary { background: color-mix(in oklab, var(--primary) 7%, var(--card)); }
@@ -1090,9 +1091,6 @@ a:focus-visible {
 .chapter-title { display: block; font-size: 0.94rem; font-weight: 600; line-height: 1.55; text-decoration-color: color-mix(in oklab, var(--primary) 35%, transparent); text-underline-offset: 4px; }
 .chapter-title:hover { color: var(--primary); text-decoration-line: underline; }
 .chapter-meta { color: var(--muted-foreground); display: flex; flex-wrap: wrap; font-size: 0.72rem; gap: 0.4rem; line-height: 1.6; margin-top: 0.45rem; }
-.chapter-preview { color: var(--muted-foreground); display: grid; font-size: 0.8rem; gap: 0.7rem; line-height: 1.65; margin-top: 1.3rem; }
-.chapter-preview > span { border-left: 2px solid color-mix(in oklab, var(--primary) 18%, var(--border)); padding-left: 0.75rem; }
-.chapter-details[open] .chapter-preview { display: none; }
 .chapter-page { color: var(--muted-foreground); font-size: 0.8rem; white-space: nowrap; }
 .chapter-chevron { border-bottom: 1.5px solid var(--muted-foreground); border-right: 1.5px solid var(--muted-foreground); height: 0.45rem; margin-top: 0.45rem; transform: rotate(-45deg); width: 0.45rem; }
 .chapter-details[open] .chapter-chevron { transform: rotate(45deg); }
@@ -1127,7 +1125,6 @@ a:focus-visible {
   .chapter-section-row { gap: 0.5rem; font-size: 0.82rem; grid-template-columns: 2rem 1fr auto; }
   .publication-details { grid-template-columns: 1fr; gap: 1rem; }
 }
-@media (max-width: 1023px) { .chapter-preview { display: none; } }
 
 /* Chapter overviews and publication updates share the book's existing theme. */
 .reading-main { padding-block: 3rem 5rem; }

@@ -52,7 +52,6 @@ function ContentsPartCard({ part }: {
               <span className="chapter-heading">
                 <TrackedLink className="chapter-title" href={chapterPath(chapter.number)} event="chapter_open" parameters={{ chapter_id: chapter.number, source: "contents_title" }}>{chapter.title}</TrackedLink>
                 <span className="chapter-meta">{chapter.sections.length} sections <span aria-hidden="true">·</span> p. {chapter.page}</span>
-                {part.id !== "ii" ? <span className="chapter-preview">{chapter.sections.slice(0, 3).map((section) => <span key={section.number}>{section.title}</span>)}</span> : null}
               </span>
               <span aria-hidden="true" className="chapter-chevron" />
             </summary>
