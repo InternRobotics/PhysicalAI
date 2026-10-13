@@ -1,5 +1,5 @@
 import { HeroSection } from "@/components/research-page/hero-section";
-import { AboutSection, AuthorsSection, BibtexSection, ContentsSection, ResourcesSection, SiteFooter } from "@/components/research-page/project-sections";
+import { AboutSection, AuthorsSection, BibtexSection, ContactSection, ContentsSection, ResourcesSection, SiteFooter } from "@/components/research-page/project-sections";
 import { SiteHeader } from "@/components/site/site-header";
 
 export default function Home() {
@@ -13,6 +13,7 @@ export default function Home() {
         <AuthorsSection />
         <ResourcesSection />
         <BibtexSection />
+        <ContactSection />
       </main>
       <SiteFooter />
     </>

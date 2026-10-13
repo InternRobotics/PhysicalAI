@@ -9,7 +9,6 @@ export const projectInfo = {
   description: "A monograph on intelligence that perceives, models, and acts upon the physical world, connecting technical foundations with embodied systems and the challenges of Physical AGI.",
   team: "Physical Intelligence Team, Shanghai AI Laboratory",
   year: "2026",
-  pdf: null as string | null,
   publisher: null as string | null,
   publicationDate: null as string | null,
   purchaseUrl: null as string | null,
@@ -21,6 +20,7 @@ export const navItems = [
   { label: "Authors", href: "#authors" },
   { label: "Resources", href: "#resources" },
   { label: "Citation", href: "#bibtex" },
+  { label: "Contact", href: "#contact" },
 ];
 
 export const authors = [{ id: "physical-intelligence-team", name: projectInfo.team }];
@@ -28,7 +28,7 @@ export const teamLogos: (ImageAsset & { id: string })[] = [
   { id: "shanghai-ai-laboratory", src: "/images/ailab-logo.png", width: 672, height: 390, alt: "Shanghai Artificial Intelligence Laboratory" },
 ];
 export const heroActions = [
-  { label: projectInfo.pdf ? "Read the preprint" : "Preprint coming soon", href: projectInfo.pdf, icon: "pdf" },
+  { label: "Preprint coming soon", href: "/read/", icon: "pdf" },
   { label: "Table of contents", href: "#contents", icon: "contents" },
   { label: "Resources", href: "#resources", icon: "resources" },
   { label: "BibTeX", href: "#bibtex", icon: "citation" },
@@ -51,9 +51,9 @@ export const aboutParagraphs = [
 ];
 export const coreElements = [
   { number: "01", title: "Perceive", body: "Estimate physical states from vision, touch, force, proprioception, and other sensing modalities." },
-  { number: "02", title: "Model & predict", body: "Represent physical relationships and anticipate the consequences of possible actions." },
-  { number: "03", title: "Decide & act", body: "Connect goals, planning, and control to feasible interventions in the physical world." },
-  { number: "04", title: "Adapt through feedback", body: "Verify outcomes, revise behavior, and learn across control, task, and deployment timescales." },
+  { number: "02", title: "Model & Predict", body: "Represent physical relationships and anticipate the consequences of possible actions." },
+  { number: "03", title: "Decide & Act", body: "Connect goals, planning, and control to feasible interventions in the physical world." },
+  { number: "04", title: "Adapt Through Feedback", body: "Verify outcomes, revise behavior, and learn across control, task, and deployment timescales." },
 ];
 export const partDescriptions: Record<string, string> = {
   i: "Definitions, boundaries, and the foundations in physics, control, cognition, and learning.",
@@ -61,11 +61,15 @@ export const partDescriptions: Record<string, string> = {
   iii: "General physical intelligence, evaluation and governance, and long-term development strategies.",
 };
 export const resources: { id: string; title: string; description: string; label: string; href: string | null; icon: "pdf" | "code" | "slides" | "errata" }[] = [
-  { id: "preprint", title: "Preprint manuscript", description: "The preprint will be shared here when it is ready for public release.", label: projectInfo.pdf ? "Open preprint" : "Coming soon", href: projectInfo.pdf, icon: "pdf" },
-  { id: "code", title: "Code & examples", description: "A space for companion implementations and examples. Links will be added when available.", label: "Coming soon", href: null, icon: "code" },
-  { id: "slides", title: "Lecture slides", description: "A space for chapter slides and teaching materials to accompany the monograph.", label: "Coming soon", href: null, icon: "slides" },
-  { id: "errata", title: "Errata & feedback", description: "Corrections and a reader feedback channel will be added here when available.", label: "Coming soon", href: null, icon: "errata" },
+  { id: "preprint", title: "Preprint Manuscript", description: "The preprint will be shared here when it is ready for public release.", label: "Publication updates", href: "/read/", icon: "pdf" },
+  { id: "code", title: "Code & Examples", description: "A space for companion implementations and examples. Links will be added when available.", label: "Coming soon", href: null, icon: "code" },
+  { id: "slides", title: "Lecture Slides", description: "A space for chapter slides and teaching materials to accompany the monograph.", label: "Coming soon", href: null, icon: "slides" },
+  { id: "errata", title: "Errata & Feedback", description: "Corrections and a reader feedback channel will be added here when available.", label: "Coming soon", href: null, icon: "errata" },
 ];
+export const contactInfo = {
+  name: "InternRobotics",
+  email: null as string | null,
+};
 export const citationText = `${projectInfo.team}. ${projectInfo.fullTitle}. Forthcoming, 2026.`;
 export const bibtex = `@misc{physicalai2026monograph,
   title  = {Physical AI: Concepts, Techniques, and Challenges},
