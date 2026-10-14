@@ -1088,17 +1088,14 @@ a:focus-visible {
 .chapter-details[open] summary { background: color-mix(in oklab, var(--primary) 7%, var(--card)); }
 .chapter-number { color: var(--primary); font-size: 0.82rem; font-weight: 650; line-height: 1.65; }
 .chapter-heading { display: block; min-width: 0; }
-.chapter-title { display: block; font-size: 0.94rem; font-weight: 600; line-height: 1.55; text-decoration-color: color-mix(in oklab, var(--primary) 35%, transparent); text-underline-offset: 4px; }
-.chapter-title:hover { color: var(--primary); text-decoration-line: underline; }
+.chapter-title { display: block; font-size: 0.94rem; font-weight: 600; line-height: 1.55; }
 .chapter-meta { color: var(--muted-foreground); display: flex; flex-wrap: wrap; font-size: 0.72rem; gap: 0.4rem; line-height: 1.6; margin-top: 0.45rem; }
 .chapter-page { color: var(--muted-foreground); font-size: 0.8rem; white-space: nowrap; }
 .chapter-chevron { border-bottom: 1.5px solid var(--muted-foreground); border-right: 1.5px solid var(--muted-foreground); height: 0.45rem; margin-top: 0.45rem; transform: rotate(-45deg); width: 0.45rem; }
 .chapter-details[open] .chapter-chevron { transform: rotate(45deg); }
 .chapter-content { border-top: 1px solid var(--border); padding: 1rem 1.3rem 1.25rem; }
-.chapter-read-link { align-items: center; color: var(--primary); display: inline-flex; font-size: 0.85rem; font-weight: 650; gap: 0.25rem; margin-bottom: 0.9rem; }
 .chapter-sections { list-style: none; margin: 0; padding: 0; }
 .chapter-section-row { align-items: baseline; border-top: 1px solid color-mix(in oklab, var(--border) 65%, transparent); color: var(--muted-foreground); display: grid; font-size: 0.8rem; gap: 0.5rem; grid-template-columns: 1.8rem minmax(0, 1fr) auto; line-height: 1.65; padding: 0.65rem 0; }
-.chapter-section-row a:hover { color: var(--primary); }
 .resource-card { display: flex; flex-direction: column; padding: 1.6rem; }
 .resource-card > div:last-child { margin-top: auto; padding-top: 1.4rem; }
 .resource-status { background: var(--muted); border: 1px solid var(--border); border-radius: 999px; color: var(--muted-foreground); display: inline-block; font-size: 0.75rem; padding: 0.35rem 0.7rem; }
@@ -1126,51 +1123,72 @@ a:focus-visible {
   .publication-details { grid-template-columns: 1fr; gap: 1rem; }
 }
 
-/* Chapter overviews and publication updates share the book's existing theme. */
-.reading-main { padding-block: 3rem 5rem; }
-.reading-back { align-items: center; color: var(--primary); display: inline-flex; font-size: 0.9rem; font-weight: 600; gap: 0.5rem; }
-.reading-title { font-size: clamp(2rem, 4.2vw, 3.7rem); font-weight: 650; line-height: 1.18; max-width: 24ch; text-wrap: balance; }
-.chapter-intro { margin-block: 3rem; max-width: 900px; }
-.chapter-intro-number { color: var(--muted-foreground); font-size: 0.9rem; margin-block: 1.8rem 0.75rem; }
-.chapter-description { color: var(--muted-foreground); font-size: 1.1rem; line-height: 1.85; margin-top: 1.5rem; max-width: 68ch; }
-.chapter-page-layout { align-items: start; display: grid; gap: 3.5rem; grid-template-columns: minmax(0, 1fr) 320px; }
-.reading-access { background: color-mix(in oklab, var(--accent) 30%, var(--card)); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; }
-.chapter-outline li { align-items: baseline; border-top: 1px solid var(--border); display: grid; gap: 1rem; grid-template-columns: 2.5rem minmax(0, 1fr) auto; line-height: 1.7; padding: 1.15rem 0; scroll-margin-top: 7rem; }
-.chapter-outline li:last-child { border-bottom: 1px solid var(--border); }
-.chapter-outline h3 { font-weight: 550; }
-.chapter-pagination { border-top: 1px solid var(--border); display: grid; gap: 2rem; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 4rem; padding-top: 1.5rem; }
-.chapter-pagination a { align-items: center; display: flex; font-size: 0.92rem; gap: 1rem; line-height: 1.7; }
-.chapter-pagination a:last-child { justify-content: flex-end; text-align: right; }
-.chapter-pagination a:hover { color: var(--primary); }
-.chapter-pagination svg { flex-shrink: 0; }
-.chapter-pagination small { color: var(--muted-foreground); display: block; font-size: 0.72rem; margin-bottom: 0.25rem; }
-.publication-hero { align-items: center; display: grid; gap: 3rem; grid-template-columns: 180px minmax(0, 1fr); margin-block: 3rem; }
-.publication-cover { border-radius: 2px 5px 5px 2px; box-shadow: 0 12px 25px rgba(17, 24, 39, 0.1); height: auto; width: 180px; }
-.reading-parts { align-items: start; display: grid; gap: 1.5rem; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.reading-part { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.4rem; }
-.reading-part li { border-top: 1px solid var(--border); }
-.reading-part li > a { align-items: baseline; display: grid; font-size: 0.86rem; gap: 0.65rem; grid-template-columns: 1.4rem minmax(0, 1fr) 0.9rem; line-height: 1.7; padding-block: 0.9rem; }
-.reading-part a:hover { color: var(--primary); }
 .contact-card { align-items: center; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); display: grid; gap: 1.5rem; grid-template-columns: auto minmax(0, 1fr) auto; padding: 1.8rem; }
 .contact-email { color: var(--primary); overflow-wrap: anywhere; }
 .contact-email-placeholder { background: var(--muted); border: 1px dashed var(--border); border-radius: var(--radius); color: var(--muted-foreground); font-size: 0.85rem; padding: 0.9rem 1.3rem; }
-@media (max-width: 1023px) {
-  .chapter-page-layout { gap: 2rem; grid-template-columns: minmax(0, 1fr); }
-  .chapter-page-layout .reading-access { grid-row: 1; }
-  .reading-parts { grid-template-columns: minmax(0, 1fr); }
-}
 @media (max-width: 640px) {
-  .reading-main { padding-block: 2rem 3.5rem; }
-  .chapter-intro { margin-block: 2rem; }
-  .chapter-description { font-size: 1rem; }
-  .reading-access { padding: 1.4rem; }
-  .chapter-outline li { font-size: 0.9rem; gap: 0.65rem; grid-template-columns: 2.2rem minmax(0, 1fr) auto; scroll-margin-top: 9rem; }
-  .publication-hero { gap: 1.75rem; grid-template-columns: minmax(0, 1fr); margin-block: 2rem; }
-  .publication-cover { width: 140px; }
-  .chapter-pagination { gap: 1.5rem; grid-template-columns: minmax(0, 1fr); }
-  .chapter-pagination a:last-child { justify-content: flex-start; text-align: left; }
   .contact-card { gap: 1rem; grid-template-columns: auto minmax(0, 1fr); padding: 1.4rem; }
   .contact-email, .contact-email-placeholder { grid-column: 1 / -1; }
+}
+
+/* Analytics stays separate from the book's reading flow. */
+.analytics-main { padding-block: 3rem 5rem; }
+.analytics-back { align-items: center; color: var(--primary); display: inline-flex; font-size: 0.9rem; font-weight: 600; gap: 0.5rem; }
+.analytics-heading { align-items: start; display: flex; flex-wrap: wrap; gap: 1.5rem 3rem; justify-content: space-between; margin-top: 3rem; }
+.analytics-heading h1 { font-size: clamp(2.5rem, 4.5vw, 4rem); font-weight: 650; line-height: 1.15; margin-top: 0.8rem; }
+.analytics-lead { color: var(--muted-foreground); font-size: 1rem; line-height: 1.8; margin-top: 1rem; max-width: 65ch; }
+.analytics-scope { background: color-mix(in oklab, var(--accent) 50%, var(--card)); border: 1px solid color-mix(in oklab, var(--primary) 25%, var(--border)); border-radius: 999px; color: var(--primary); font-size: 0.78rem; font-weight: 600; margin-top: 0.3rem; padding: 0.5rem 0.9rem; white-space: nowrap; }
+.analytics-scope-note { border-left: 3px solid var(--primary); color: var(--muted-foreground); font-size: 0.85rem; line-height: 1.8; margin-top: 2rem; padding-left: 1rem; max-width: 95ch; }
+.analytics-error { background: var(--muted); border: 1px solid var(--border); border-radius: var(--radius); font-size: 0.9rem; line-height: 1.8; margin-top: 1.5rem; padding: 1rem 1.25rem; }
+.analytics-metrics { display: grid; gap: 1.5rem; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-block: 2rem; }
+.analytics-metric { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem 1.6rem; }
+.analytics-metric h2 { color: var(--muted-foreground); font-size: 0.85rem; font-weight: 600; }
+.analytics-metric > p { color: var(--primary); font-size: clamp(2.2rem, 3.5vw, 3rem); font-weight: 650; line-height: 1.2; margin-block: 0.65rem; overflow-wrap: anywhere; }
+.analytics-metric > span { color: var(--muted-foreground); font-size: 0.75rem; }
+.analytics-panel { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; }
+.analytics-panel-heading { align-items: center; display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: space-between; }
+.analytics-panel-heading h2 { font-size: 1.15rem; font-weight: 650; }
+.analytics-panel-heading p { color: var(--muted-foreground); font-size: 0.8rem; line-height: 1.8; margin-top: 0.35rem; }
+.analytics-periods { background: var(--muted); border: 1px solid var(--border); border-radius: 999px; display: flex; gap: 0.2rem; padding: 0.2rem; }
+.analytics-periods button { border-radius: 999px; cursor: pointer; font-size: 0.75rem; padding: 0.4rem 0.9rem; }
+.analytics-periods button[aria-pressed="true"] { background: var(--card); box-shadow: 0 1px 3px rgba(17, 24, 39, 0.1); color: var(--primary); font-weight: 600; }
+.click-chart { margin-block: 1.75rem 0.5rem; position: relative; }
+.click-chart svg { display: block; overflow: visible; width: 100%; }
+.click-chart-grid { stroke: var(--border); stroke-dasharray: 3 5; stroke-width: 1; }
+.click-chart-label { fill: var(--muted-foreground); font-family: var(--font-sans); font-size: 12px; }
+.click-chart-bar { fill: var(--primary); opacity: 0.7; }
+.click-chart-bar.is-active { opacity: 1; }
+.click-chart-empty { align-items: center; display: flex; flex-direction: column; gap: 0.65rem; inset: 10% 12% 15%; justify-content: center; pointer-events: none; position: absolute; text-align: center; }
+.click-chart-empty p { font-size: 0.95rem; font-weight: 600; }
+.click-chart-empty span { color: var(--muted-foreground); font-size: 0.75rem; line-height: 1.7; }
+.click-chart-tooltip { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: 0 4px 14px rgba(17, 24, 39, 0.08); font-size: 0.75rem; padding: 0.7rem 0.9rem; pointer-events: none; position: absolute; top: 0.5rem; transform: translateX(-50%); }
+.click-chart-tooltip span { color: var(--muted-foreground); display: block; margin-bottom: 0.2rem; }
+.click-chart-tooltip strong { color: var(--primary); font-weight: 650; }
+.analytics-chart-loading { align-items: center; color: var(--muted-foreground); display: flex; font-size: 0.9rem; justify-content: center; min-height: 270px; }
+.analytics-panel-footer { border-top: 1px solid var(--border); color: var(--muted-foreground); display: flex; flex-wrap: wrap; font-size: 0.7rem; gap: 0.5rem 1rem; justify-content: space-between; line-height: 1.8; padding-top: 1rem; }
+.analytics-data-panel { margin-top: 1.5rem; }
+.analytics-data-actions { display: flex; flex-wrap: wrap; gap: 0.7rem; }
+.analytics-data-details { border-top: 1px solid var(--border); margin-top: 1.5rem; }
+.analytics-data-details summary { color: var(--primary); cursor: pointer; font-size: 0.85rem; font-weight: 600; padding-top: 1rem; }
+.analytics-table-scroll { margin-top: 1rem; max-height: 320px; overflow: auto; }
+.analytics-table-scroll table { border-collapse: collapse; font-size: 0.85rem; width: 100%; }
+.analytics-table-scroll th, .analytics-table-scroll td { border-bottom: 1px solid var(--border); padding: 0.8rem 0.5rem; text-align: left; }
+.analytics-table-scroll thead th { background: var(--muted); font-weight: 600; position: sticky; top: 0; }
+.analytics-table-scroll tbody th { color: var(--muted-foreground); font-weight: 400; }
+.analytics-table-scroll th:last-child, .analytics-table-scroll td:last-child { text-align: right; }
+.analytics-note { color: var(--muted-foreground); font-size: 0.75rem; line-height: 1.9; margin-top: 1.5rem; max-width: 90ch; }
+@media (max-width: 640px) {
+  .analytics-main { padding-block: 2rem 3.5rem; }
+  .analytics-heading { margin-top: 2rem; }
+  .analytics-metrics { gap: 1rem; grid-template-columns: minmax(0, 1fr); }
+  .analytics-metric { padding: 1.2rem 1.4rem; }
+  .analytics-panel { padding: 1.2rem; }
+  .click-chart { min-height: 190px; }
+  .click-chart svg { height: auto; }
+  .click-chart-label { font-size: 14px; }
+  .click-chart-empty { inset: 8% 8% 12%; }
+  .click-chart-empty p { font-size: 0.82rem; }
+  .click-chart-empty span { font-size: 0.7rem; }
 }
 
 /* Book landing page: retain W0 colors, typography, buttons, and theme switching. */

@@ -5,10 +5,9 @@ import { CopyCitation } from "@/components/research-page/copy-citation";
 import { FigureCard } from "@/components/site/figure-card";
 import { SectionShell } from "@/components/site/section-shell";
 import { buttonClasses } from "@/components/ui/button";
-import { TrackedLink } from "@/components/tracked-link";
+import { ArxivLink } from "@/components/arxiv-link";
 import contents from "@/data/contents.json";
 import { aboutParagraphs, bibtex, citationText, contactInfo, coreElements, figures, partDescriptions, projectInfo, resources } from "@/data/project-page";
-import { chapterPath } from "@/data/reading";
 import { assetPath } from "@/lib/asset-path";
 
 export function AboutSection() {
@@ -25,7 +24,7 @@ export function AboutSection() {
       <div className="definition-note mt-8">
         <p className="section-eyebrow">The Organizing Idea</p>
         <p className="organizing-statement mt-3 text-foreground">Perception, prediction, decision-making, action, and adaptation form a continuous loop through the physical world.</p>
-        <TrackedLink className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-primary" href={chapterPath(1)} event="chapter_open" parameters={{ chapter_id: 1, source: "organizing_idea" }}>An organizing framework introduced in Chapter 1. <ArrowUpRight aria-hidden="true" className="size-4" /></TrackedLink>
+        <p className="mt-3 text-sm font-medium text-muted-foreground">An organizing framework introduced in Chapter 1.</p>
       </div>
       <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {coreElements.map((element) => <article className="step-card" key={element.number}><span>{element.number}</span><h3>{element.title}</h3><p>{element.body}</p></article>)}
@@ -50,15 +49,14 @@ function ContentsPartCard({ part }: {
             <summary>
               <span className="chapter-number">{String(chapter.number).padStart(2, "0")}</span>
               <span className="chapter-heading">
-                <TrackedLink className="chapter-title" href={chapterPath(chapter.number)} event="chapter_open" parameters={{ chapter_id: chapter.number, source: "contents_title" }}>{chapter.title}</TrackedLink>
+                <span className="chapter-title">{chapter.title}</span>
                 <span className="chapter-meta">{chapter.sections.length} sections <span aria-hidden="true">·</span> p. {chapter.page}</span>
               </span>
               <span aria-hidden="true" className="chapter-chevron" />
             </summary>
             <div className="chapter-content">
-              <TrackedLink className="chapter-read-link" href={chapterPath(chapter.number)} event="chapter_open" parameters={{ chapter_id: chapter.number, source: "contents_expanded" }}>Chapter overview <ArrowUpRight aria-hidden="true" className="size-3.5" /></TrackedLink>
               <ol className="chapter-sections">
-                {chapter.sections.map((section) => <li className="chapter-section-row" key={section.number}><span className="text-primary">{section.number}</span><TrackedLink href={`${chapterPath(chapter.number)}#section-${section.number}`} event="chapter_open" parameters={{ chapter_id: chapter.number, section_id: section.number, source: "contents_section" }}>{section.title}</TrackedLink><span className="chapter-page">{section.page}</span></li>)}
+                {chapter.sections.map((section) => <li className="chapter-section-row" key={section.number}><span className="text-primary">{section.number}</span><span>{section.title}</span><span className="chapter-page">{section.page}</span></li>)}
               </ol>
             </div>
           </details>
@@ -70,12 +68,12 @@ function ContentsPartCard({ part }: {
 
 export function ContentsSection() {
   return (
-    <SectionShell className="bg-muted/35" eyebrow="Inside the Monograph" id="contents" title="Table of Contents" headingClassName="max-w-none" lead={<>Three parts trace a path from concepts and foundations, through the technical stack, to future directions.<br className="desktop-lead-break" />{" "}Select a chapter title for its overview, or expand the row to explore its sections.</>}>
+    <SectionShell className="bg-muted/35" eyebrow="Inside the Monograph" id="contents" title="Table of Contents" headingClassName="max-w-none" lead={<>Three parts trace a path from concepts and foundations, through the technical stack, to future directions.<br className="desktop-lead-break" />{" "}Expand a chapter to explore its sections.</>}>
       <div className="contents-grid">
         {contents.map((part) => <ContentsPartCard key={part.id} part={part} />)}
       </div>
       <p className="mt-5 text-sm font-medium">References <span className="ml-2 text-muted-foreground">p. 313</span></p>
-      <p className="results-note">Chapter pages introduce the forthcoming content. Page numbers refer to the draft manuscript.</p>
+      <p className="results-note">Expand a chapter to view its sections. Page numbers refer to the draft manuscript.</p>
     </SectionShell>
   );
 }
@@ -104,7 +102,7 @@ export function ResourcesSection() {
               <Icon aria-hidden="true" className="size-6 text-primary" strokeWidth={1.5} />
               <h3>{resource.title}</h3><p>{resource.description}</p>
               <div className="mt-6">
-                {resource.href ? resource.id === "preprint" ? <TrackedLink className={buttonClasses({ variant: "outline", size: "sm" })} href={resource.href} event="reading_open" parameters={{ source: "resources" }}><ArrowUpRight aria-hidden="true" />{resource.label}</TrackedLink> : <a className={buttonClasses({ variant: "outline", size: "sm" })} href={assetPath(resource.href)} target="_blank" rel="noopener noreferrer"><ArrowUpRight aria-hidden="true" />{resource.label}</a> : <span className="resource-status">{resource.label}</span>}
+                {resource.href ? <a className={buttonClasses({ variant: "outline", size: "sm" })} href={assetPath(resource.href)} target="_blank" rel="noopener noreferrer"><ArrowUpRight aria-hidden="true" />{resource.label}</a> : <span className="resource-status">{resource.label}</span>}
               </div>
             </article>
           );
@@ -131,8 +129,8 @@ export function BibtexSection() {
       <p className="results-note">The citation will be updated when the manuscript and final publication details are available.</p>
       <div className="mt-12 border-t border-border pt-10">
         <h3 className="text-2xl font-semibold">Explore Intelligence in the Physical World.</h3>
-        <p className="mt-3 text-muted-foreground">Explore the table of contents while the preprint is being prepared for release.</p>
-        <div className="mt-6 flex flex-wrap gap-3"><TrackedLink aria-label="Publication updates — preprint coming soon" className={buttonClasses()} href="/read/" event="reading_open" parameters={{ source: "footer_cta" }}><BookOpen aria-hidden="true" />Preprint coming soon</TrackedLink><a className={buttonClasses({ variant: "outline" })} href="#contents">Browse the contents</a></div>
+        <p className="mt-3 text-muted-foreground">The arXiv preprint is coming soon. Explore the table of contents while it is being prepared for release.</p>
+        <div className="mt-6 flex flex-wrap gap-3"><ArxivLink className={buttonClasses()} href={projectInfo.arxivUrl}><BookOpen aria-hidden="true" />Read on arXiv</ArxivLink><a className={buttonClasses({ variant: "outline" })} href="#contents">Browse the contents</a></div>
       </div>
     </SectionShell>
   );

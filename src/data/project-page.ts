@@ -9,6 +9,8 @@ export const projectInfo = {
   description: "A monograph on intelligence that perceives, models, and acts upon the physical world, connecting technical foundations with embodied systems and the challenges of Physical AGI.",
   team: "Physical Intelligence Team, Shanghai AI Laboratory",
   year: "2026",
+  // Deliberately unpublished arXiv placeholder. Replace this URL after release.
+  arxivUrl: "https://arxiv.org/abs/0000.00000",
   publisher: null as string | null,
   publicationDate: null as string | null,
   purchaseUrl: null as string | null,
@@ -28,7 +30,7 @@ export const teamLogos: (ImageAsset & { id: string })[] = [
   { id: "shanghai-ai-laboratory", src: "/images/ailab-logo.png", width: 672, height: 390, alt: "Shanghai Artificial Intelligence Laboratory" },
 ];
 export const heroActions = [
-  { label: "Preprint coming soon", href: "/read/", icon: "pdf" },
+  { label: "Preprint coming soon", href: null, icon: "pdf" },
   { label: "Table of contents", href: "#contents", icon: "contents" },
   { label: "Resources", href: "#resources", icon: "resources" },
   { label: "BibTeX", href: "#bibtex", icon: "citation" },
@@ -61,7 +63,7 @@ export const partDescriptions: Record<string, string> = {
   iii: "General physical intelligence, evaluation and governance, and long-term development strategies.",
 };
 export const resources: { id: string; title: string; description: string; label: string; href: string | null; icon: "pdf" | "code" | "slides" | "errata" }[] = [
-  { id: "preprint", title: "Preprint Manuscript", description: "The preprint will be shared here when it is ready for public release.", label: "Publication updates", href: "/read/", icon: "pdf" },
+  { id: "preprint", title: "Preprint Manuscript", description: "The preprint will be shared here when it is ready for public release.", label: "Coming soon", href: null, icon: "pdf" },
   { id: "code", title: "Code & Examples", description: "A space for companion implementations and examples. Links will be added when available.", label: "Coming soon", href: null, icon: "code" },
   { id: "slides", title: "Lecture Slides", description: "A space for chapter slides and teaching materials to accompany the monograph.", label: "Coming soon", href: null, icon: "slides" },
   { id: "errata", title: "Errata & Feedback", description: "Corrections and a reader feedback channel will be added here when available.", label: "Coming soon", href: null, icon: "errata" },

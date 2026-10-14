@@ -3,7 +3,6 @@ import Image from "next/image";
 
 import { InteractiveBookCover } from "@/components/research-page/interactive-book-cover";
 import { buttonClasses } from "@/components/ui/button";
-import { TrackedLink } from "@/components/tracked-link";
 import { bookCover, heroActions, projectInfo, teamLogos } from "@/data/project-page";
 import { assetPath } from "@/lib/asset-path";
 
@@ -33,9 +32,7 @@ export function HeroSection() {
           </div>
           <p className="book-hero-description">{projectInfo.description}</p>
           <div className="book-hero-actions">
-            {heroActions.map((action, index) => action.icon === "pdf" ? (
-              <TrackedLink aria-label="Publication updates — preprint coming soon" className={buttonClasses({ size: "md" })} href="/read/" event="reading_open" parameters={{ source: "hero" }} key={action.label}>{icons[action.icon]}{action.label}</TrackedLink>
-            ) : action.href ? (
+            {heroActions.map((action, index) => action.href ? (
               <a
                 className={buttonClasses({ size: "md", variant: index === 0 ? "default" : "outline" })}
                 href={assetPath(action.href)}

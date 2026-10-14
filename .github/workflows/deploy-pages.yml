@@ -41,6 +41,8 @@ jobs:
       - name: Build static site
         env:
           NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          NEXT_PUBLIC_ANALYTICS_EVENT_ENDPOINT: ${{ vars.NEXT_PUBLIC_ANALYTICS_EVENT_ENDPOINT }}
+          NEXT_PUBLIC_ANALYTICS_SUMMARY_ENDPOINT: ${{ vars.NEXT_PUBLIC_ANALYTICS_SUMMARY_ENDPOINT }}
           NEXT_TELEMETRY_DISABLED: "1"
         run: pnpm run build
 

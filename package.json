@@ -8,7 +8,8 @@
     "dev": "next dev",
     "lint": "eslint",
     "preview": "python -m http.server 3001 --bind 127.0.0.1 --directory out",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:analytics": "node scripts/test-analytics.cjs"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.19",
