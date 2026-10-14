@@ -12,7 +12,7 @@ export function ArxivClickCount() {
     global ? "Clicks across all visitors." : "Clicks recorded in this browser.";
   return (
     <p className="arxiv-click-count" title={note} aria-live="polite" aria-atomic="true">
-      <span className="arxiv-click-number">{count}</span> clicks on arXiv
+      <span className="arxiv-click-number">{count}</span>{" "}<span className="arxiv-click-label">clicks on arXiv</span>
     </p>
   );
 }
