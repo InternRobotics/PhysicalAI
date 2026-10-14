@@ -83,5 +83,18 @@ function loadAnalytics() {
   analyticsConfig.eventEndpoint = null;
   delete context.window;
   await assert.doesNotReject(() => trackArxivClick('https://arxiv.org/abs/0000.00000'));
+
+  const linkSource = fs.readFileSync('src/components/arxiv-link.tsx', 'utf8');
+  const linkCode = ts.transpileModule(linkSource, { compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX } }).outputText;
+  const linkContext = { exports: {}, require: name => name === '@/lib/analytics' ? { trackArxivClick: () => { activations++; return Promise.resolve(); } } : require(name) };
+  let activations = 0;
+  vm.runInNewContext(linkCode, linkContext);
+  const link = linkContext.exports.ArxivLink({ href: 'https://arxiv.org/abs/0000.00000', children: 'Read on arXiv' });
+  link.props.onClick({ button: 0 }); // Primary click and keyboard activation.
+  link.props.onClick({ button: 1 }); // Middle clicks belong only to auxclick.
+  link.props.onAuxClick({ button: 1 });
+  link.props.onClick({ button: 2 });
+  link.props.onAuxClick({ button: 2 });
+  assert.equal(activations, 2, 'Primary and middle clicks each count once; right clicks do not count');
   console.log('PASS: date boundaries, persistence, daily aggregation, CSV, malformed data, concurrent clicks, storage failures, disabled global transport, beacon fallback');
 })().catch(error => { console.error(error); process.exitCode = 1; });

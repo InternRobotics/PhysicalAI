@@ -11,7 +11,7 @@ export function ArxivLink({ href, children, ...props }: Omit<AnchorHTMLAttribute
       target="_blank"
       rel="noopener noreferrer"
       data-analytics-event="arxiv_click"
-      onClick={() => { void trackArxivClick(href); }}
+      onClick={(event) => { if (event.button === 0) void trackArxivClick(href); }}
       onAuxClick={(event) => { if (event.button === 1) void trackArxivClick(href); }}
     >{children}</a>
   );

@@ -7,6 +7,7 @@ import { ANALYTICS_TIME_ZONE, CLICK_EVENT, CLICK_STORAGE_KEY, analyticsConfig, c
 import { assetPath } from "@/lib/asset-path";
 
 const countFormat = new Intl.NumberFormat("en-US");
+const clickLabel = (count: number) => `${countFormat.format(count)} ${count === 1 ? "click" : "clicks"}`;
 const axisFormat = new Intl.NumberFormat("en-US", { notation: "compact" });
 const dateFormat = new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short", timeZone: "UTC" });
 const displayDate = (date: string) => dateFormat.format(new Date(`${date}T00:00:00Z`));
@@ -30,7 +31,7 @@ function ClickChart({ series }: { series: ClickDay[] }) {
   return (
     <div className="click-chart" onPointerLeave={() => setActive(null)}>
       <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`Daily arXiv clicks over the last ${series.length} days`}>
-        <desc>{series.reduce((sum, day) => sum + day.clicks, 0)} clicks in this date range. A daily data table is available below.</desc>
+        <desc>{clickLabel(series.reduce((sum, day) => sum + day.clicks, 0))} in this date range. A daily data table is available below.</desc>
         {[0, 1, 2, 3, 4].map((tick) => {
           const y = top + plotHeight - tick * plotHeight / 4;
           return <g key={tick}><line x1={left} x2={width - right} y1={y} y2={y} className="click-chart-grid" /><text x={left - 12} y={y + 4} textAnchor="end" className="click-chart-label">{axisFormat.format(max * tick / 4)}</text></g>;
@@ -40,13 +41,13 @@ function ClickChart({ series }: { series: ClickDay[] }) {
           const barHeight = day.clicks ? Math.max(2, day.clicks / max * plotHeight) : 0;
           return <g key={day.date} onPointerEnter={() => setActive(index)}>
             <rect x={x} y={top + plotHeight - barHeight} width={barWidth} height={barHeight} rx={Math.min(3, barWidth / 2)} className={active === index ? "click-chart-bar is-active" : "click-chart-bar"} />
-            <rect x={left + index * slot} y={top} width={slot} height={plotHeight} fill="transparent" tabIndex={day.clicks ? 0 : -1} onFocus={() => setActive(index)} onBlur={() => setActive(null)} aria-label={`${day.date}: ${day.clicks} clicks`}><title>{day.date}: {day.clicks} clicks</title></rect>
+            <rect x={left + index * slot} y={top} width={slot} height={plotHeight} fill="transparent" tabIndex={day.clicks ? 0 : -1} onFocus={() => setActive(index)} onBlur={() => setActive(null)} aria-label={`${day.date}: ${clickLabel(day.clicks)}`}><title>{day.date}: {clickLabel(day.clicks)}</title></rect>
           </g>;
         })}
         {[0, Math.floor((series.length - 1) / 2), series.length - 1].map((index) => <text key={index} x={left + (index + 0.5) * slot} y={height - 10} textAnchor={index === 0 ? "start" : index === series.length - 1 ? "end" : "middle"} className="click-chart-label">{displayDate(series[index].date)}</text>)}
       </svg>
       {!hasClicks ? <div className="click-chart-empty"><MousePointer2 aria-hidden="true" className="size-6 text-primary" /><p>No clicks in this date range</p><span>Counts appear when the book’s arXiv button is used.</span></div> : null}
-      {selected && hasClicks ? <div className="click-chart-tooltip" style={{ left: `${Math.max(9, Math.min(91, (left + ((active ?? 0) + 0.5) * slot) / width * 100))}%` }}><span>{selected.date}</span><strong>{countFormat.format(selected.clicks)} clicks</strong></div> : null}
+      {selected && hasClicks ? <div className="click-chart-tooltip" style={{ left: `${Math.max(9, Math.min(91, (left + ((active ?? 0) + 0.5) * slot) / width * 100))}%` }}><span>{selected.date}</span><strong>{clickLabel(selected.clicks)}</strong></div> : null}
     </div>
   );
 }
@@ -125,7 +126,7 @@ export function ClickDashboard() {
       </div>
       <section className="analytics-panel" aria-labelledby="click-trend-title">
         <div className="analytics-panel-heading">
-          <div><h2 id="click-trend-title">Daily Clicks</h2><p>{data ? `${countFormat.format(periodTotal)} clicks in the selected period` : loading ? "Loading counts…" : "Counts unavailable"}</p></div>
+          <div><h2 id="click-trend-title">Daily Clicks</h2><p>{data ? `${clickLabel(periodTotal)} in the selected period` : loading ? "Loading counts…" : "Counts unavailable"}</p></div>
           <div className="analytics-periods" aria-label="Date range">{[7, 30, 90].map((days) => <button key={days} type="button" aria-pressed={range === days} onClick={() => setRange(days)}>{days} days</button>)}</div>
         </div>
         {data ? <ClickChart key={range} series={series} /> : <div className="analytics-chart-loading">{loading ? "Loading chart…" : "The chart will appear when data is available."}</div>}
