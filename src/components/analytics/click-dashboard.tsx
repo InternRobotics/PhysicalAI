@@ -3,7 +3,8 @@
 import { ArrowLeft, Download, MousePointer2, RefreshCw } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ANALYTICS_TIME_ZONE, CLICK_EVENT, CLICK_STORAGE_KEY, analyticsConfig, clickCsv, clickSeries, dateKey, emptyClickData, httpsEndpoint, normalizeClickData, readLocalClicks, totalClicks, type ClickData, type ClickDay } from "@/lib/analytics";
+import { useClickData } from "@/components/analytics/use-click-data";
+import { ANALYTICS_TIME_ZONE, clickCsv, clickSeries, dateKey, emptyClickData, totalClicks, type ClickDay } from "@/lib/analytics";
 import { assetPath } from "@/lib/asset-path";
 
 const countFormat = new Intl.NumberFormat("en-US");
@@ -46,61 +47,22 @@ function ClickChart({ series }: { series: ClickDay[] }) {
         })}
         {[0, Math.floor((series.length - 1) / 2), series.length - 1].map((index) => <text key={index} x={left + (index + 0.5) * slot} y={height - 10} textAnchor={index === 0 ? "start" : index === series.length - 1 ? "end" : "middle"} className="click-chart-label">{displayDate(series[index].date)}</text>)}
       </svg>
-      {!hasClicks ? <div className="click-chart-empty"><MousePointer2 aria-hidden="true" className="size-6 text-primary" /><p>No clicks in this date range</p><span>Counts appear when the book’s arXiv button is used.</span></div> : null}
+      {!hasClicks ? <div className="click-chart-empty"><MousePointer2 aria-hidden="true" className="size-6 text-primary" /><p>No clicks in this date range</p><span>Counts appear when the official arXiv button is used after release.</span></div> : null}
       {selected && hasClicks ? <div className="click-chart-tooltip" style={{ left: `${Math.max(9, Math.min(91, (left + ((active ?? 0) + 0.5) * slot) / width * 100))}%` }}><span>{selected.date}</span><strong>{clickLabel(selected.clicks)}</strong></div> : null}
     </div>
   );
 }
 
 export function ClickDashboard() {
-  const [data, setData] = useState<ClickData | null>(null);
+  const { data, loading, error, published, global, refresh } = useClickData();
   const [range, setRange] = useState(30);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [refreshKey, setRefreshKey] = useState(0);
-  const global = Boolean(analyticsConfig.summaryEndpoint);
-
-  useEffect(() => {
-    let alive = true, revision = 0;
-    const controller = new AbortController();
-    const refresh = async () => {
-      const request = ++revision;
-      if (alive) setLoading(true);
-      try {
-        let snapshot: ClickData;
-        if (global) {
-          const endpoint = httpsEndpoint(analyticsConfig.summaryEndpoint);
-          if (!endpoint) throw new Error("The summary endpoint needs a valid HTTPS URL.");
-          const response = await fetch(endpoint, { signal: controller.signal, cache: "no-store", credentials: "omit" });
-          if (!response.ok) throw new Error("The global summary is unavailable. Please try again later.");
-          const raw = await response.json();
-          if (!raw || raw.version !== 1 || !raw.daily || typeof raw.daily !== "object" || Array.isArray(raw.daily)) throw new Error("The summary service returned an unsupported data format.");
-          snapshot = normalizeClickData(raw);
-        } else snapshot = readLocalClicks(window.localStorage);
-        if (alive && request === revision) { setData(snapshot); setError(null); }
-      } catch (cause) {
-        if (alive && request === revision) {
-          setData(null);
-          setError(global ? cause instanceof Error ? cause.message : "The summary service is unavailable." : "Browser storage is unavailable. Click counts cannot be saved or read here.");
-        }
-      } finally { if (alive && request === revision) setLoading(false); }
-    };
-    const storageChanged = (event: StorageEvent) => { if (event.key === CLICK_STORAGE_KEY) void refresh(); };
-    const visible = () => { if (document.visibilityState === "visible") void refresh(); };
-    void refresh();
-    window.addEventListener(CLICK_EVENT, refresh);
-    window.addEventListener("storage", storageChanged);
-    window.addEventListener("focus", refresh);
-    document.addEventListener("visibilitychange", visible);
-    return () => { alive = false; controller.abort(); window.removeEventListener(CLICK_EVENT, refresh); window.removeEventListener("storage", storageChanged); window.removeEventListener("focus", refresh); document.removeEventListener("visibilitychange", visible); };
-  }, [global, refreshKey]);
 
   const snapshot = data ?? emptyClickData();
   const series = clickSeries(snapshot, range);
   const periodTotal = series.reduce((sum, day) => sum + day.clicks, 0);
   const metrics = [
     { label: "Total Clicks", value: totalClicks(snapshot), detail: "All recorded dates" },
-    { label: "Today", value: snapshot.daily[dateKey()] ?? 0, detail: data ? `Date: ${dateKey()}` : "Asia/Shanghai (UTC+8)" },
+    { label: "Today", value: snapshot.daily[dateKey()] ?? 0, detail: published && data ? `Date: ${dateKey()}` : "Asia/Shanghai (UTC+8)" },
     { label: "Last 7 Days", value: clickSeries(snapshot, 7).reduce((sum, day) => sum + day.clicks, 0), detail: "Including today" },
   ];
   const exportCsv = () => {
@@ -117,12 +79,12 @@ export function ClickDashboard() {
       <a className="analytics-back" href={assetPath("/#bibtex")}><ArrowLeft aria-hidden="true" className="size-4" />Back to the Book</a>
       <header className="analytics-heading">
         <div><p className="section-eyebrow">Website Analytics</p><h1>arXiv Clicks</h1><p className="analytics-lead">Clicks on the arXiv button under “Explore Intelligence in the Physical World.”</p></div>
-        <span className="analytics-scope">{global ? "All visitor data" : "Local browser data"}</span>
+        <span className="analytics-scope">{!published ? "Awaiting publication" : global ? "All visitor data" : "Local browser data"}</span>
       </header>
-      <p className="analytics-scope-note">{global ? "Counts are supplied by the configured summary service." : "These counts belong to this browser only. Visitors and devices are not combined. Global analytics is ready to connect when a service is configured."}</p>
+      <p className="analytics-scope-note">{!published ? "The preprint has not been published yet. Counts stay at 0 and no clicks are recorded until the official arXiv link is enabled." : global ? "Counts are supplied by the configured summary service." : "These counts belong to this browser only. Visitors and devices are not combined. Global analytics is ready to connect when a service is configured."}</p>
       {error ? <p role="alert" className="analytics-error">{error}</p> : null}
       <div className="analytics-metrics" aria-live="polite">
-        {metrics.map((metric) => <article className="analytics-metric" key={metric.label}><h2>{metric.label}</h2><p>{data ? countFormat.format(metric.value) : "—"}</p><span>{metric.detail}</span></article>)}
+        {metrics.map((metric) => <article className="analytics-metric" key={metric.label}><h2>{metric.label}</h2><p>{data || !published ? countFormat.format(metric.value) : "—"}</p><span>{metric.detail}</span></article>)}
       </div>
       <section className="analytics-panel" aria-labelledby="click-trend-title">
         <div className="analytics-panel-heading">
@@ -133,10 +95,10 @@ export function ClickDashboard() {
         <div className="analytics-panel-footer"><span>Dates use {ANALYTICS_TIME_ZONE} (UTC+8).</span><span>{data?.updatedAt ? `Last click: ${new Intl.DateTimeFormat("en-GB", { timeZone: ANALYTICS_TIME_ZONE, dateStyle: "medium", timeStyle: "short" }).format(new Date(data.updatedAt))}` : "No clicks recorded yet"}</span></div>
       </section>
       <section className="analytics-panel analytics-data-panel" aria-labelledby="daily-data-title">
-        <div className="analytics-panel-heading"><div><h2 id="daily-data-title">Daily Data</h2><p>Daily counts for the selected period. CSV exports include all recorded dates.</p></div><div className="analytics-data-actions"><Button size="sm" variant="outline" onClick={() => setRefreshKey((key) => key + 1)} disabled={loading}><RefreshCw aria-hidden="true" />Refresh</Button><Button size="sm" variant="outline" onClick={exportCsv} disabled={!data}><Download aria-hidden="true" />Export CSV</Button></div></div>
+        <div className="analytics-panel-heading"><div><h2 id="daily-data-title">Daily Data</h2><p>Daily counts for the selected period. CSV exports include all recorded dates.</p></div><div className="analytics-data-actions"><Button size="sm" variant="outline" onClick={refresh} disabled={loading}><RefreshCw aria-hidden="true" />Refresh</Button><Button size="sm" variant="outline" onClick={exportCsv} disabled={!data}><Download aria-hidden="true" />Export CSV</Button></div></div>
         <details className="analytics-data-details"><summary>View daily counts</summary><div className="analytics-table-scroll"><table><thead><tr><th scope="col">Date</th><th scope="col">arXiv Clicks</th></tr></thead><tbody>{data ? [...series].reverse().map((day) => <tr key={day.date}><th scope="row">{day.date}</th><td>{countFormat.format(day.clicks)}</td></tr>) : <tr><td colSpan={2}>Counts unavailable</td></tr>}</tbody></table></div></details>
       </section>
-      <p className="analytics-note">Counts measure button clicks, including clicks while the arXiv destination is still a 404 placeholder. They do not represent unique readers or successful downloads.{!global ? " Clearing browser data removes these local records." : ""}</p>
+      <p className="analytics-note">Only clicks on the official, released arXiv link are counted. Placeholder clicks and earlier test records are excluded. Counts do not represent unique readers or successful downloads.{published && !global ? " Clearing browser data removes these local records." : ""}</p>
     </div>
   );
 }

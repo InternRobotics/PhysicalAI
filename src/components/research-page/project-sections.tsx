@@ -6,13 +6,14 @@ import { FigureCard } from "@/components/site/figure-card";
 import { SectionShell } from "@/components/site/section-shell";
 import { buttonClasses } from "@/components/ui/button";
 import { ArxivLink } from "@/components/arxiv-link";
+import { ArxivClickCount } from "@/components/analytics/arxiv-click-count";
 import contents from "@/data/contents.json";
 import { aboutParagraphs, bibtex, citationText, contactInfo, coreElements, figures, partDescriptions, projectInfo, resources } from "@/data/project-page";
 import { assetPath } from "@/lib/asset-path";
 
 export function AboutSection() {
   return (
-    <SectionShell eyebrow="About the Book" id="about" title="A Unified View of Physical AI" lead={<>What is Physical AI? What does its technical landscape look like?<br className="desktop-lead-break" />{" "}What challenges stand between today's systems and general physical intelligence?</>}>
+    <SectionShell eyebrow="About the Book" id="about" title="A Unified View of Physical AI" lead={<>What is Physical AI? What does its technical landscape look like?<br className="desktop-lead-break" />{" "}What challenges stand between today&apos;s systems and general physical intelligence?</>}>
       <div className="grid items-start gap-8 lg:grid-cols-[1fr_1fr]">
         <div className="space-y-5 text-base leading-8 text-muted-foreground">
           {aboutParagraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
@@ -81,8 +82,8 @@ export function ContentsSection() {
 export function AuthorsSection() {
   return (
     <SectionShell eyebrow="Authors" id="authors" title="About the Authors" lead="Physical Intelligence Team, Shanghai AI Laboratory">
-      <div className="max-w-4xl space-y-4 leading-8 text-muted-foreground">
-        <p>The monograph is authored by the Physical Intelligence Team, Shanghai AI Laboratory. It brings together the concepts, techniques, and challenges of intelligence that interacts with the physical world.</p>
+      <div className="space-y-4 leading-8 text-muted-foreground">
+        <p>The monograph is authored by the Physical Intelligence Team, Shanghai AI Laboratory.{" "}<span className="authors-summary">It brings together the concepts, techniques, and challenges of intelligence that interacts with the physical world.</span></p>
         <p className="text-sm">Individual author profiles and acknowledgments will be added when available.</p>
       </div>
     </SectionShell>
@@ -130,7 +131,7 @@ export function BibtexSection() {
       <div className="mt-12 border-t border-border pt-10">
         <h3 className="text-2xl font-semibold">Explore Intelligence in the Physical World.</h3>
         <p className="mt-3 text-muted-foreground">The arXiv preprint is coming soon. Explore the table of contents while it is being prepared for release.</p>
-        <div className="mt-6 flex flex-wrap gap-3"><ArxivLink className={buttonClasses()} href={projectInfo.arxivUrl}><BookOpen aria-hidden="true" />Read on arXiv</ArxivLink><a className={buttonClasses({ variant: "outline" })} href="#contents">Browse the contents</a></div>
+        <div className="mt-6 flex flex-wrap items-start gap-3"><div className="arxiv-action"><ArxivLink className={buttonClasses()} href={projectInfo.arxivUrl}><BookOpen aria-hidden="true" />Read on arXiv</ArxivLink><ArxivClickCount /></div><a className={buttonClasses({ variant: "outline" })} href="#contents">Browse the contents</a></div>
       </div>
     </SectionShell>
   );

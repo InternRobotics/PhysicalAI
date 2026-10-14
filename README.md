@@ -43,7 +43,7 @@ The static export is generated in `out/`. The GitHub Pages workflow is in `.gith
 | --- | --- |
 | Book information, cover configuration, resource links, and citation | `src/data/project-page.ts` |
 | Parts, chapters, sections, and page numbers | `src/data/contents.json` |
-| arXiv destination | `projectInfo.arxivUrl` in `src/data/project-page.ts` |
+| arXiv destination and release switch | `src/data/publication.ts` |
 | Click collection, persistence, and aggregation | `src/lib/analytics.ts` |
 | Analytics dashboard | `src/app/analytics/` and `src/components/analytics/` |
 | Unreleased manuscript (local only, excluded from Git and deployment) | `reference/private-manuscript/` |
@@ -53,7 +53,7 @@ The static export is generated in `out/`. The GitHub Pages workflow is in `.gith
 
 The current concept cover is in `public/images/monograph/cover-v2.png`. To replace it with final artwork, place the new image in the same directory and update `bookCover.src`, its dimensions, and alternative text in `src/data/project-page.ts`. The existing hover interaction and mobile placement apply to the replacement automatically.
 
-Replace `projectInfo.arxivUrl` with the official public arXiv URL after release. The button links directly to arXiv without an intermediate page. Keep unpublished PDFs outside `public/`; `reference/` is ignored by Git and is not part of the site export. The manuscript extraction script reads the local copy under `reference/private-manuscript/`.
+After release, set `arxivPublication.url` to the official public arXiv abstract URL and set `arxivPublication.published` to `true` in `src/data/publication.ts`, then rebuild. Both are required to start counting. The button links directly to arXiv without an intermediate page. Keep unpublished PDFs outside `public/`; `reference/` is ignored by Git and is not part of the site export. The manuscript extraction script reads the local copy under `reference/private-manuscript/`.
 
 Unavailable resource links use `href: null`. Add their URLs and labels when the materials are ready. Publisher, publication date, and purchase link are configured in `projectInfo`. The table of contents displays one column per part on desktop and one column on smaller screens. Chapter rows expand or collapse their sections; the table of contents has no reading links. The former `/read/` and `/chapters/` pages have been removed.
 
@@ -63,9 +63,9 @@ Set `contactInfo.email` in `src/data/project-page.ts` to enable the InternRoboti
 
 [Analytics dashboard](https://internrobotics.github.io/PhysicalAI/analytics/)
 
-The bottom arXiv button records `arxiv_click` events. Its left click, keyboard activation, and middle click are counted even while the destination returns 404. These are button clicks, not unique readers or completed downloads.
+The bottom arXiv button displays a text counter beneath it. Before release, this counter and the dashboard stay at **0**; placeholder clicks do not write local records or send analytics events. After the official link and publication switch are enabled, left clicks, keyboard activation, and middle clicks record `arxiv_click` events. These are button clicks, not unique readers or completed downloads.
 
-By default, daily counts are saved in **this browser only**, under the `physicalai:arxiv-clicks:v1` localStorage key. The dashboard shows total clicks, today's clicks, the last seven days, 7/30/90-day charts, a daily table, and CSV export. Dates use Asia/Shanghai (UTC+8). Different visitors, devices, browsers, and browser profiles are not combined. Clearing browser data removes local counts. Storage or analytics failures do not block the arXiv link.
+After release, daily counts are saved in **this browser only** by default, under the `physicalai:arxiv-clicks:published:v1` localStorage key. Earlier placeholder test records are excluded. The homepage counter and dashboard share the same data source. The dashboard shows total clicks, today's clicks, the last seven days, 7/30/90-day charts, a daily table, and CSV export. Dates use Asia/Shanghai (UTC+8). Different visitors, devices, browsers, and browser profiles are not combined. Clearing browser data removes local counts. Storage or analytics failures do not block the arXiv link.
 
 No external analytics service is enabled by default. Two optional HTTPS endpoints are ready for future global collection and visualization:
 
@@ -79,7 +79,7 @@ For local development, copy `.env.example` to `.env.local`. For GitHub Pages, se
 The collection payload is JSON sent with a `text/plain` content type, so the endpoint should parse the text body as JSON:
 
 ```json
-{"event":"arxiv_click","event_id":"unique-event-id","occurred_at":"2026-10-14T08:00:00Z","source":"bottom_cta","destination":"https://arxiv.org/abs/0000.00000"}
+{"event":"arxiv_click","event_id":"unique-event-id","occurred_at":"2026-10-14T08:00:00Z","source":"bottom_cta","destination":"https://arxiv.org/abs/2601.12345"}
 ```
 
 The backend should deduplicate `event_id`, aggregate dates in Asia/Shanghai, and return this summary shape with CORS access for the website:

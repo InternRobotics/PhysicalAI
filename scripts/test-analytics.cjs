@@ -4,6 +4,9 @@ const vm = require('node:vm');
 const ts = require('typescript');
 
 function loadAnalytics() {
+  const publicationSource = fs.readFileSync('src/data/publication.ts', 'utf8');
+  const publicationContext = { exports: {}, URL };
+  vm.runInNewContext(ts.transpileModule(publicationSource, { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText, publicationContext);
   const source = fs.readFileSync('src/lib/analytics.ts', 'utf8');
   const code = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText;
   const values = new Map(), events = [], requests = [], beacons = [];
@@ -11,6 +14,7 @@ function loadAnalytics() {
   let lock = Promise.resolve();
   const context = {
     exports: {}, process: { env: {} }, URL, Intl, Date,
+    require: name => { assert.equal(name, '@/data/publication'); return publicationContext.exports; },
     window: { localStorage: storage, dispatchEvent: event => events.push(event) },
     navigator: {
       locks: { request: (_key, callback) => { const next = lock.then(callback); lock = next.catch(() => {}); return next; } },
@@ -21,12 +25,36 @@ function loadAnalytics() {
     fetch: (url, options) => { requests.push({ url, options }); return Promise.resolve({ ok: true }); },
   };
   vm.runInNewContext(code, context);
-  return { api: context.exports, context, values, storage, events, requests, beacons };
+  return { api: context.exports, publication: publicationContext.exports, context, values, storage, events, requests, beacons };
 }
 
 (async () => {
-  const { api, context, values, storage, events, requests, beacons } = loadAnalytics();
+  const { api, publication, context, values, storage, events, requests, beacons } = loadAnalytics();
   const { CLICK_STORAGE_KEY, dateKey, clickSeries, incrementLocalClicks, readLocalClicks, normalizeClickData, totalClicks, clickCsv, trackArxivClick, analyticsConfig, sendClickEvent, httpsEndpoint } = api;
+  const { arxivPublication, isArxivPublished } = publication;
+  const releasedUrl = 'https://arxiv.org/abs/2601.12345';
+  const event = { event: 'arxiv_click', event_id: 'test', occurred_at: '2026-10-14T00:00:00Z', source: 'bottom_cta', destination: releasedUrl };
+
+  values.set('physicalai:arxiv-clicks:v1', JSON.stringify({ version: 1, daily: { '2026-10-14': 4 }, updatedAt: null }));
+  analyticsConfig.eventEndpoint = 'https://analytics.example.test/events';
+  await trackArxivClick(arxivPublication.url);
+  sendClickEvent(event);
+  assert.equal(totalClicks(readLocalClicks(storage)), 0, 'Earlier placeholder records must not enter the release count');
+  assert.equal(values.has(CLICK_STORAGE_KEY), false, 'Unreleased clicks must not write records');
+  assert.equal(events.length + requests.length + beacons.length, 0, 'Unreleased clicks must not dispatch or transmit events');
+  arxivPublication.published = true;
+  assert.equal(isArxivPublished(), false, 'The placeholder cannot enable tracking even with the release switch on');
+  await trackArxivClick(arxivPublication.url);
+  assert.equal(values.has(CLICK_STORAGE_KEY), false);
+  arxivPublication.url = releasedUrl;
+  arxivPublication.published = false;
+  await trackArxivClick(releasedUrl);
+  assert.equal(values.has(CLICK_STORAGE_KEY), false, 'A real URL alone must not start counting before release');
+  arxivPublication.published = true;
+  assert.equal(isArxivPublished(), true);
+  await trackArxivClick('https://arxiv.org/abs/0000.00000');
+  assert.equal(events.length, 0, 'A stale placeholder tab must not start recording');
+  analyticsConfig.eventEndpoint = null;
 
   assert.equal(dateKey(new Date('2026-10-13T15:59:59Z')), '2026-10-13');
   assert.equal(dateKey(new Date('2026-10-13T16:00:00Z')), '2026-10-14');
@@ -51,7 +79,7 @@ function loadAnalytics() {
   assert.equal(totalClicks(readLocalClicks(storage)), 0);
   values.delete(CLICK_STORAGE_KEY);
 
-  await Promise.all(Array.from({ length: 5 }, () => trackArxivClick('https://arxiv.org/abs/0000.00000')));
+  await Promise.all(Array.from({ length: 5 }, () => trackArxivClick(releasedUrl)));
   assert.equal(totalClicks(readLocalClicks(storage)), 5, 'Concurrent clicks must not overwrite each other');
   assert.equal(events.length, 5);
   assert.equal(events[0].detail.event, 'arxiv_click');
@@ -59,15 +87,14 @@ function loadAnalytics() {
   assert.equal(events[0].detail.local_recorded, true);
   assert.equal(requests.length + beacons.length, 0, 'Default tracking must stay browser-local');
   delete context.navigator.locks;
-  await trackArxivClick('https://arxiv.org/abs/0000.00000');
+  await trackArxivClick(releasedUrl);
   assert.equal(totalClicks(readLocalClicks(storage)), 6, 'Browsers without Web Locks still record clicks');
   context.window.localStorage = { getItem: () => null, setItem: () => { throw new Error('quota exceeded'); } };
-  await assert.doesNotReject(() => trackArxivClick('https://arxiv.org/abs/0000.00000'));
+  await assert.doesNotReject(() => trackArxivClick(releasedUrl));
   assert.equal(events.at(-1).detail.local_recorded, false);
 
   assert.equal(httpsEndpoint('http://example.test/events'), null);
   assert.equal(httpsEndpoint('https://user:secret@example.test/events'), null);
-  const event = { event: 'arxiv_click', event_id: 'test', occurred_at: '2026-10-14T00:00:00Z', source: 'bottom_cta', destination: 'https://arxiv.org/abs/0000.00000' };
   analyticsConfig.eventEndpoint = 'https://analytics.example.test/events';
   sendClickEvent(event);
   assert.equal(beacons.length, 1);
@@ -82,7 +109,7 @@ function loadAnalytics() {
   assert.doesNotThrow(() => sendClickEvent(event));
   analyticsConfig.eventEndpoint = null;
   delete context.window;
-  await assert.doesNotReject(() => trackArxivClick('https://arxiv.org/abs/0000.00000'));
+  await assert.doesNotReject(() => trackArxivClick(releasedUrl));
 
   const linkSource = fs.readFileSync('src/components/arxiv-link.tsx', 'utf8');
   const linkCode = ts.transpileModule(linkSource, { compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX } }).outputText;
@@ -96,5 +123,5 @@ function loadAnalytics() {
   link.props.onClick({ button: 2 });
   link.props.onAuxClick({ button: 2 });
   assert.equal(activations, 2, 'Primary and middle clicks each count once; right clicks do not count');
-  console.log('PASS: date boundaries, persistence, daily aggregation, CSV, malformed data, concurrent clicks, storage failures, disabled global transport, beacon fallback');
+  console.log('PASS: release gate, placeholder exclusion, legacy-record isolation, date boundaries, persistence, aggregation, CSV, concurrent clicks, storage failures, transport fallback');
 })().catch(error => { console.error(error); process.exitCode = 1; });

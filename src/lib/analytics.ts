@@ -1,4 +1,7 @@
-export const CLICK_STORAGE_KEY = "physicalai:arxiv-clicks:v1";
+import { isArxivPublished } from "@/data/publication";
+
+// Isolate official-release clicks from the earlier placeholder test records.
+export const CLICK_STORAGE_KEY = "physicalai:arxiv-clicks:published:v1";
 export const CLICK_EVENT = "physicalai:analytics";
 export const ANALYTICS_TIME_ZONE = "Asia/Shanghai";
 
@@ -85,6 +88,7 @@ export function httpsEndpoint(endpoint: string | null): string | null {
 
 // Only active after a collection endpoint is explicitly configured.
 export function sendClickEvent(event: ArxivClickEvent) {
+  if (!isArxivPublished(event.destination)) return;
   const endpoint = httpsEndpoint(analyticsConfig.eventEndpoint);
   if (!endpoint) return;
   const body = JSON.stringify(event);
@@ -97,7 +101,7 @@ export function sendClickEvent(event: ArxivClickEvent) {
 }
 
 export async function trackArxivClick(destination: string) {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || !isArxivPublished(destination)) return;
   const at = new Date();
   let saved = false;
   const save = () => { incrementLocalClicks(window.localStorage, at); saved = true; };
