@@ -33,7 +33,7 @@ function loadAnalytics() {
   const { CLICK_STORAGE_KEY, dateKey, clickSeries, incrementLocalClicks, readLocalClicks, normalizeClickData, totalClicks, clickCsv, trackArxivClick, analyticsConfig, sendClickEvent, httpsEndpoint } = api;
   const { arxivPublication, isArxivPublished } = publication;
   const releasedUrl = 'https://arxiv.org/abs/2601.12345';
-  const event = { event: 'arxiv_click', event_id: 'test', occurred_at: '2026-10-14T00:00:00Z', source: 'bottom_cta', destination: releasedUrl };
+  const event = { event: 'arxiv_click', event_id: 'test', occurred_at: '2026-10-14T00:00:00Z', source: 'preprint_resource', destination: releasedUrl };
 
   values.set('physicalai:arxiv-clicks:v1', JSON.stringify({ version: 1, daily: { '2026-10-14': 4 }, updatedAt: null }));
   analyticsConfig.eventEndpoint = 'https://analytics.example.test/events';
@@ -83,7 +83,7 @@ function loadAnalytics() {
   assert.equal(totalClicks(readLocalClicks(storage)), 5, 'Concurrent clicks must not overwrite each other');
   assert.equal(events.length, 5);
   assert.equal(events[0].detail.event, 'arxiv_click');
-  assert.equal(events[0].detail.source, 'bottom_cta');
+  assert.equal(events[0].detail.source, 'preprint_resource');
   assert.equal(events[0].detail.local_recorded, true);
   assert.equal(requests.length + beacons.length, 0, 'Default tracking must stay browser-local');
   delete context.navigator.locks;

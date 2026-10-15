@@ -14,7 +14,7 @@ export type ClickData = { version: 1; daily: Record<string, number>; updatedAt: 
 export type ClickDay = { date: string; clicks: number };
 export type ArxivClickEvent = {
   event: "arxiv_click"; event_id: string; occurred_at: string;
-  source: "bottom_cta"; destination: string;
+  source: "preprint_resource"; destination: string;
 };
 type ClickStorage = Pick<Storage, "getItem" | "setItem">;
 
@@ -114,7 +114,7 @@ export async function trackArxivClick(destination: string) {
   try { eventId = crypto.randomUUID(); } catch { /* A non-identifying fallback works in older browsers. */ }
   const event: ArxivClickEvent = {
     event: "arxiv_click", event_id: eventId, occurred_at: at.toISOString(),
-    source: "bottom_cta", destination,
+    source: "preprint_resource", destination,
   };
   try { window.dispatchEvent(new CustomEvent(CLICK_EVENT, { detail: { ...event, local_recorded: saved } })); } catch { /* Optional integration hook. */ }
   sendClickEvent(event);

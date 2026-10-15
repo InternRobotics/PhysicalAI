@@ -16,7 +16,7 @@ The forthcoming monograph contains **12 chapters in three parts**:
 | II. Methodology | 3–9 | Perception, data, world models, manipulation, motor control, agents, and systems |
 | III. Future Outlook | 10–12 | General physical intelligence, evaluation, safety, governance, and development strategies |
 
-The website includes the book introduction, a three-part expandable table of contents, author information, companion resources, contact information, and a provisional citation. An original concept cover and a vector overview figure are included. The manuscript is not yet publicly released. The only arXiv reading link appears under **Explore Intelligence in the Physical World.** It currently points to an unpublished placeholder that returns 404.
+The website includes the book introduction, a three-part expandable table of contents, author information, companion resources, contact information, and a provisional citation. An original concept cover and a vector overview figure are included. The manuscript is not yet publicly released. The only arXiv reading link and its click counter appear in the **Preprint Manuscript** resource card. The link currently points to an unpublished placeholder that returns 404.
 
 ## Development
 
@@ -55,7 +55,7 @@ The current concept cover is in `public/images/monograph/cover-v2.png`. To repla
 
 After release, set `arxivPublication.url` to the official public arXiv abstract URL and set `arxivPublication.published` to `true` in `src/data/publication.ts`, then rebuild. Both are required to start counting. The button links directly to arXiv without an intermediate page. Keep unpublished PDFs outside `public/`; `reference/` is ignored by Git and is not part of the site export. The manuscript extraction script reads the local copy under `reference/private-manuscript/`.
 
-Unavailable resource links use `href: null`. Add their URLs and labels when the materials are ready. Publisher, publication date, and purchase link are configured in `projectInfo`. The table of contents displays one column per part on desktop and one column on smaller screens. Chapter rows expand or collapse their sections; the table of contents has no reading links. The former `/read/` and `/chapters/` pages have been removed.
+Unavailable companion resource links use `href: null`. Add their URLs and labels when the materials are ready. The Preprint Manuscript card uses the arXiv publication configuration. Publisher, publication date, and purchase link are configured in `projectInfo`. The table of contents displays one column per part on desktop and one column on smaller screens. Closed cards align on desktop; expanding a chapter changes only its own column's height. Chapter rows expand or collapse their sections; the table of contents has no reading links. The former `/read/` and `/chapters/` pages have been removed.
 
 Set `contactInfo.email` in `src/data/project-page.ts` to enable the InternRobotics email link. While it is `null`, the site displays an email placeholder without a fabricated address.
 
@@ -63,7 +63,7 @@ Set `contactInfo.email` in `src/data/project-page.ts` to enable the InternRoboti
 
 [Analytics dashboard](https://internrobotics.github.io/PhysicalAI/analytics/)
 
-The bottom arXiv button displays a text counter beneath it. Before release, this counter and the dashboard stay at **0**; placeholder clicks do not write local records or send analytics events. After the official link and publication switch are enabled, left clicks, keyboard activation, and middle clicks record `arxiv_click` events. These are button clicks, not unique readers or completed downloads.
+The arXiv button in Preprint Manuscript displays a text counter beneath it. Before release, this counter and the dashboard stay at **0**; placeholder clicks do not write local records or send analytics events. After the official link and publication switch are enabled, left clicks, keyboard activation, and middle clicks record `arxiv_click` events with `source: "preprint_resource"`. These are button clicks, not unique readers or completed downloads.
 
 After release, daily counts are saved in **this browser only** by default, under the `physicalai:arxiv-clicks:published:v1` localStorage key. Earlier placeholder test records are excluded. The homepage counter and dashboard share the same data source. The dashboard shows total clicks, today's clicks, the last seven days, 7/30/90-day charts, a daily table, and CSV export. Dates use Asia/Shanghai (UTC+8). Different visitors, devices, browsers, and browser profiles are not combined. Clearing browser data removes local counts. Storage or analytics failures do not block the arXiv link.
 
@@ -79,7 +79,7 @@ For local development, copy `.env.example` to `.env.local`. For GitHub Pages, se
 The collection payload is JSON sent with a `text/plain` content type, so the endpoint should parse the text body as JSON:
 
 ```json
-{"event":"arxiv_click","event_id":"unique-event-id","occurred_at":"2026-10-14T08:00:00Z","source":"bottom_cta","destination":"https://arxiv.org/abs/2601.12345"}
+{"event":"arxiv_click","event_id":"unique-event-id","occurred_at":"2026-10-14T08:00:00Z","source":"preprint_resource","destination":"https://arxiv.org/abs/2601.12345"}
 ```
 
 The backend should deduplicate `event_id`, aggregate dates in Asia/Shanghai, and return this summary shape with CORS access for the website:

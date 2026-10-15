@@ -99,11 +99,16 @@ export function ResourcesSection() {
         {resources.map((resource) => {
           const Icon = resourceIcons[resource.icon];
           return (
-            <article className="step-card resource-card" key={resource.id}>
+            <article className="step-card resource-card" key={resource.id} id={resource.id === "preprint" ? "preprint-manuscript" : undefined}>
               <Icon aria-hidden="true" className="size-6 text-primary" strokeWidth={1.5} />
               <h3>{resource.title}</h3><p>{resource.description}</p>
               <div className="mt-6">
-                {resource.href ? <a className={buttonClasses({ variant: "outline", size: "sm" })} href={assetPath(resource.href)} target="_blank" rel="noopener noreferrer"><ArrowUpRight aria-hidden="true" />{resource.label}</a> : <span className="resource-status">{resource.label}</span>}
+                {resource.id === "preprint" ? (
+                  <div className="arxiv-action resource-preprint-action">
+                    <ArxivLink className={buttonClasses()} href={projectInfo.arxivUrl}><ArrowUpRight aria-hidden="true" />Read on arXiv</ArxivLink>
+                    <ArxivClickCount />
+                  </div>
+                ) : resource.href ? <a className={buttonClasses({ variant: "outline", size: "sm" })} href={assetPath(resource.href)} target="_blank" rel="noopener noreferrer"><ArrowUpRight aria-hidden="true" />{resource.label}</a> : <span className="resource-status">{resource.label}</span>}
               </div>
             </article>
           );
@@ -128,11 +133,6 @@ export function BibtexSection() {
       <div className="mb-4 flex flex-wrap items-center justify-between gap-4"><h3 className="flex items-center gap-2 font-semibold"><FileText aria-hidden="true" className="size-4 text-primary" />BibTeX</h3><CopyCitation text={bibtex} /></div>
       <pre className="overflow-x-auto rounded-lg border border-border bg-card p-5 text-sm leading-7 text-foreground"><code>{bibtex}</code></pre>
       <p className="results-note">The citation will be updated when the manuscript and final publication details are available.</p>
-      <div className="mt-12 border-t border-border pt-10">
-        <h3 className="text-2xl font-semibold">Explore Intelligence in the Physical World.</h3>
-        <p className="mt-3 text-muted-foreground">The arXiv preprint is coming soon. Explore the table of contents while it is being prepared for release.</p>
-        <div className="mt-6 flex flex-wrap items-start gap-3"><div className="arxiv-action"><ArxivLink className={buttonClasses()} href={projectInfo.arxivUrl}><BookOpen aria-hidden="true" />Read on arXiv</ArxivLink><ArxivClickCount /></div><a className={buttonClasses({ variant: "outline" })} href="#contents">Browse the contents</a></div>
-      </div>
     </SectionShell>
   );
 }

@@ -76,9 +76,9 @@ export function ClickDashboard() {
 
   return (
     <div className="mx-auto max-w-[1120px]" id="top">
-      <a className="analytics-back" href={assetPath("/#bibtex")}><ArrowLeft aria-hidden="true" className="size-4" />Back to the Book</a>
+      <a className="analytics-back" href={assetPath("/#preprint-manuscript")}><ArrowLeft aria-hidden="true" className="size-4" />Back to the Book</a>
       <header className="analytics-heading">
-        <div><p className="section-eyebrow">Website Analytics</p><h1>arXiv Clicks</h1><p className="analytics-lead">Clicks on the arXiv button under “Explore Intelligence in the Physical World.”</p></div>
+        <div><p className="section-eyebrow">Website Analytics</p><h1>arXiv Clicks</h1><p className="analytics-lead">Clicks on the arXiv button in the Preprint Manuscript resource card.</p></div>
         <span className="analytics-scope">{!published ? "Awaiting publication" : global ? "All visitor data" : "Local browser data"}</span>
       </header>
       <p className="analytics-scope-note">{!published ? "The preprint has not been published yet. Counts stay at 0 and no clicks are recorded until the official arXiv link is enabled." : global ? "Counts are supplied by the configured summary service." : "These counts belong to this browser only. Visitors and devices are not combined. Global analytics is ready to connect when a service is configured."}</p>
