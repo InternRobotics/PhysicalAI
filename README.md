@@ -63,7 +63,7 @@ Set `contactInfo.email` in `src/data/project-page.ts` to enable the InternRoboti
 
 [Analytics dashboard](https://internrobotics.github.io/PhysicalAI/analytics/)
 
-The arXiv button in Preprint Manuscript displays a text counter beneath it. Before release, this counter and the dashboard stay at **0**; placeholder clicks do not write local records or send analytics events. After the official link and publication switch are enabled, left clicks, keyboard activation, and middle clicks record `arxiv_click` events with `source: "preprint_resource"`. These are button clicks, not unique readers or completed downloads.
+The arXiv button in Preprint Manuscript displays a text counter to its right. Before release, this counter and the dashboard stay at **0**; placeholder clicks do not write local records or send analytics events. After the official link and publication switch are enabled, left clicks, keyboard activation, and middle clicks record `arxiv_click` events with `source: "preprint_resource"`. These are button clicks, not unique readers or completed downloads.
 
 After release, daily counts are saved in **this browser only** by default, under the `physicalai:arxiv-clicks:published:v1` localStorage key. Earlier placeholder test records are excluded. The homepage counter and dashboard share the same data source. The dashboard shows total clicks, today's clicks, the last seven days, 7/30/90-day charts, a daily table, and CSV export. Dates use Asia/Shanghai (UTC+8). Different visitors, devices, browsers, and browser profiles are not combined. Clearing browser data removes local counts. Storage or analytics failures do not block the arXiv link.
 

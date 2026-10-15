@@ -73,7 +73,7 @@ export function ContentsSection() {
       <div className="contents-grid">
         {contents.map((part) => <ContentsPartCard key={part.id} part={part} />)}
       </div>
-      <p className="mt-5 text-sm font-medium">References <span className="ml-2 text-muted-foreground">p. 313</span></p>
+      <p className="mt-5 text-sm font-medium">References <span className="ml-2 text-muted-foreground">p. {projectInfo.referencesPage}</span></p>
       <p className="results-note">Expand a chapter to view its sections. Page numbers refer to the draft manuscript.</p>
     </SectionShell>
   );
@@ -105,7 +105,7 @@ export function ResourcesSection() {
               <div className="mt-6">
                 {resource.id === "preprint" ? (
                   <div className="arxiv-action resource-preprint-action">
-                    <ArxivLink className={buttonClasses()} href={projectInfo.arxivUrl}><ArrowUpRight aria-hidden="true" />Read on arXiv</ArxivLink>
+                    <ArxivLink className={buttonClasses({ size: "sm" })} href={projectInfo.arxivUrl}><ArrowUpRight aria-hidden="true" />Read on arXiv</ArxivLink>
                     <ArxivClickCount />
                   </div>
                 ) : resource.href ? <a className={buttonClasses({ variant: "outline", size: "sm" })} href={assetPath(resource.href)} target="_blank" rel="noopener noreferrer"><ArrowUpRight aria-hidden="true" />{resource.label}</a> : <span className="resource-status">{resource.label}</span>}

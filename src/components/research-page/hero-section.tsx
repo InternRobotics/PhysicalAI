@@ -50,7 +50,7 @@ export function HeroSection() {
           <dl aria-label="About this edition" className="book-facts">
             <div><dt>Parts</dt><dd>3</dd></div>
             <div><dt>Chapters</dt><dd>12</dd></div>
-            <div><dt>Manuscript pages</dt><dd>362</dd></div>
+            <div><dt>Manuscript pages</dt><dd>{projectInfo.manuscriptPages}</dd></div>
           </dl>
         </div>
         <figure className="book-cover-figure">

@@ -1,4 +1,4 @@
-// Content verified against Physical_AI___Monograph.pdf. Edit this file for release updates.
+// Page numbers verified against Physical_AI___Monograph (2).pdf. Edit this file for release updates.
 import { arxivPublication } from "@/data/publication";
 
 export type ImageAsset = { src: string | null; width: number; height: number; alt: string };
@@ -11,6 +11,8 @@ export const projectInfo = {
   description: "A monograph on intelligence that perceives, models, and acts upon the physical world, connecting technical foundations with embodied systems and the challenges of Physical AGI.",
   team: "Physical Intelligence Team, Shanghai AI Laboratory",
   year: "2026",
+  manuscriptPages: 389,
+  referencesPage: 344,
   arxivUrl: arxivPublication.url,
   publisher: null as string | null,
   publicationDate: null as string | null,
