@@ -1131,11 +1131,11 @@ a:focus-visible {
 }
 
 .contact-card { align-items: center; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); display: grid; gap: 1.5rem; grid-template-columns: auto minmax(0, 1fr) auto; padding: 1.8rem; }
-.contact-email { color: var(--primary); overflow-wrap: anywhere; }
-.contact-email-placeholder { background: var(--muted); border: 1px dashed var(--border); border-radius: var(--radius); color: var(--muted-foreground); font-size: 0.85rem; padding: 0.9rem 1.3rem; }
+.contact-card p { overflow-wrap: anywhere; }
+.contact-action { justify-self: end; }
 @media (max-width: 640px) {
   .contact-card { gap: 1rem; grid-template-columns: auto minmax(0, 1fr); padding: 1.4rem; }
-  .contact-email, .contact-email-placeholder { grid-column: 1 / -1; }
+  .contact-action { grid-column: 1 / -1; justify-self: start; }
 }
 
 /* Analytics stays separate from the book's reading flow. */

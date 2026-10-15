@@ -10,5 +10,5 @@ export const metadata: Metadata = {
 };
 
 export default function AnalyticsPage() {
-  return <><SiteHeader home /><main id="main-content" className="analytics-main px-5"><ClickDashboard /></main><SiteFooter home /></>;
+  return <><SiteHeader home /><main id="main-content" className="analytics-main px-5"><ClickDashboard /></main><SiteFooter /></>;
 }

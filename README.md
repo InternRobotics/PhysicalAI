@@ -57,7 +57,7 @@ After release, set `arxivPublication.url` to the official public arXiv abstract 
 
 Unavailable companion resource links use `href: null`. Add their URLs and labels when the materials are ready. The Preprint Manuscript card uses the arXiv publication configuration. Publisher, publication date, and purchase link are configured in `projectInfo`. The table of contents displays one column per part on desktop and one column on smaller screens. Closed cards align on desktop; expanding a chapter changes only its own column's height. Chapter rows expand or collapse their sections; the table of contents has no reading links. The former `/read/` and `/chapters/` pages have been removed.
 
-Set `contactInfo.email` in `src/data/project-page.ts` to enable the InternRobotics email link. While it is `null`, the site displays an email placeholder without a fabricated address.
+Set `contactInfo.email` in `src/data/project-page.ts` to enable the **Contact us** button in the InternRobotics card. While it is `null`, the button is disabled and the card explains that the email will be announced. The footer retains the book information and Back to top link.
 
 ## Click analytics
 

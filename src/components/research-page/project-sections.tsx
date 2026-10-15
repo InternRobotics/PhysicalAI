@@ -4,7 +4,7 @@ import { ProjectImage } from "@/components/media/project-image";
 import { CopyCitation } from "@/components/research-page/copy-citation";
 import { FigureCard } from "@/components/site/figure-card";
 import { SectionShell } from "@/components/site/section-shell";
-import { buttonClasses } from "@/components/ui/button";
+import { Button, buttonClasses } from "@/components/ui/button";
 import { ArxivLink } from "@/components/arxiv-link";
 import { ArxivClickCount } from "@/components/analytics/arxiv-click-count";
 import contents from "@/data/contents.json";
@@ -142,17 +142,17 @@ export function ContactSection() {
     <SectionShell eyebrow="Contact" id="contact" title="Get in Touch" lead="For questions about the monograph and its companion materials.">
       <div className="contact-card">
         <Mail aria-hidden="true" className="size-7 text-primary" strokeWidth={1.5} />
-        <div><h3 className="text-xl font-semibold">{contactInfo.name}</h3><p className="mt-2 text-sm text-muted-foreground">{contactInfo.email ? "Email the team" : "Our contact email will be announced here."}</p></div>
-        {contactInfo.email ? <a className="contact-email" href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a> : <span className="contact-email-placeholder">Email to be announced</span>}
+        <div><h3 className="text-xl font-semibold">{contactInfo.name}</h3><p className="mt-2 text-sm text-muted-foreground">{contactInfo.email ?? "Our contact email will be announced here."}</p></div>
+        {contactInfo.email ? <a className={buttonClasses({ className: "contact-action" })} href={`mailto:${contactInfo.email}`}>Contact us</a> : <Button className="contact-action" disabled title="Our contact email will be announced here.">Contact us</Button>}
       </div>
     </SectionShell>
   );
 }
 
-export function SiteFooter({ home = false }: { home?: boolean }) {
+export function SiteFooter() {
   return (
     <footer className="border-t border-border bg-muted/35 px-5 py-8">
-      <div className="mx-auto flex max-w-[1120px] flex-wrap items-center justify-between gap-4 text-sm leading-6 text-muted-foreground"><p>{projectInfo.fullTitle}<br />{projectInfo.team}</p><div className="flex gap-5"><a className="text-primary" href={home ? assetPath("/#contact") : "#contact"}>Contact</a><a className="text-primary" href="#top">Back to top ↑</a></div></div>
+      <div className="mx-auto flex max-w-[1120px] flex-wrap items-center justify-between gap-4 text-sm leading-6 text-muted-foreground"><p>{projectInfo.fullTitle}<br />{projectInfo.team}</p><a className="text-primary" href="#top">Back to top ↑</a></div>
     </footer>
   );
 }
